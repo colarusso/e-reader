@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return response.text(); // Proceed to extract the text only if status is 200
     })
     .then(text => {
-        //text = text;
+        text = text;
         pages = paginateText(text); // Dynamically paginate text
         displayPage(currentPage);
         updateProgress();
@@ -129,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateProgress();
         }
     }
-
 
     function paginateText(text) {
 
