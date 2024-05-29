@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(error);
         text = `<b>File not found</b>
         
-        Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name</i>`;
+        Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Paginate the error message
         displayPage(currentPage);
