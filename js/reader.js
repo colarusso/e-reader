@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get title from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const title = urlParams.get('title') || 'Name';
-    const textFile = `${title}.txt`;
+    const title = urlParams.get('file') || 'Name';
+    const textFile = title//`${title}.txt`;
 
     // Display the title as a link
     //titleElement.innerText = title.charAt(0).toUpperCase() + title.slice(1);
@@ -56,16 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return response.text(); // Proceed to extract the text only if status is 200
     })
     .then(text => {
-        text = text;
+        document.getElementById("text_container").value = text;
         pages = paginateText(text); // Dynamically paginate text
         displayPage(currentPage);
         updateProgress();
     })
     .catch((error) => {
-        console.log("###", error);
+        console.log(error);
         text = `<b>File not found</b>
         
-        Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?title=file_name</i>`;
+        Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name</i>`;
+        document.getElementById("text_container").value = text;
         pages = paginateText(text); // Paginate the error message
         displayPage(currentPage);
         updateProgress();        
@@ -123,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function paginateAndDisplay() {
         saveSettings();
         if (pages.length > 0) {
-            pages = paginateText(text);
+            pages = paginateText(document.getElementById("text_container").value);
             //window.location.href = ''
             displayPage(currentPage);
             updateProgress();
@@ -186,7 +187,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const testWidth = metrics.width;
     
                 if (testWidth > screenWidth && currentLine !== '') {
-                    console.log(screenWidth,testWidth,currentLine)
+                    //console.log(screenWidth,testWidth,currentLine)
+                    console.log(currentLine)
                     addLineToPage(currentLine);
                     currentLine = word + ' ';
                 } else {

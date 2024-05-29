@@ -129,14 +129,13 @@
     </style>
 </head>
 <body>
-    <textarea id="text_container" hidden></textarea>
     <div id="settingsToggleRow">
         <button id="settingsToggle" onclick="toggleSettings()">☰</button>
         <a id="title" href="" target="_blank"></a>
         <button id="infoToggle" onclick="toggleInfo()">?</button>
     </div>
     <div id="information" class="hidden">
-        <p>This is a very simple eReader for text files created by <a href="https://mastodon.social/@Colarusso" target="_blank">Colarusso</a>. Just specify the file you want to view by appending a `title` parameter to the URL with the path and name of a .txt file (e.g., <i style="white-space: nowrap;">?title=texts/story_name</i>). Keep in mind, however, that it can only read files on the same domain as this page. If you want to use adapt or use this reader, you can find the code <a href="" target="_blank">on GitHub</a>.</p>
+        <p>This is a very simple eReader for text files created by <a href="https://mastodon.social/@Colarusso" target="_blank">Colarusso</a>. Just specify the file you want to view by appending a `title` parameter to the URL with the path and name of a .txt file (e.g., <i style="white-space: nowrap;">?file=texts/story_name</i>). Keep in mind, however, that it can only read files on the same domain as this page. If you want to use adapt or use this reader, you can find the code <a href="https://github.com/colarusso/e-reader" target="_blank">on GitHub</a>.</p>
     </div>
     <div id="controls" class="hidden">
         <label for="fontType">Font: </label>
@@ -169,6 +168,7 @@
         <span id="progressPercentage">0%</span>
         <span id="timeRemaining">0 mins left</span>
     </footer>
+    <textarea id="text_container" hidden></textarea>
     <script src="js/reader.js"></script>
 </body>
 </html>
