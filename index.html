@@ -126,6 +126,12 @@
         .hidden {
             display: none;
         }
+
+        @media screen and (max-width: 767px) {
+            _::-webkit-full-page-media, _:future, :root .safari_only {
+                padding-bottom: 65px; //resize 
+            }
+        }
     </style>
 </head>
 <body>
@@ -164,7 +170,7 @@
         <button onclick="goToLast()">Last Page</button>
     </div>
     <div id="content" onclick="handleContentClick(event)"></div>
-    <footer>
+    <footer class="safari_only">
         <span id="progressPercentage">0%</span>
         <span id="timeRemaining">0 mins left</span>
     </footer>
