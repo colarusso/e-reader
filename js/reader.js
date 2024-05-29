@@ -21,12 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get title from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const title = urlParams.get('file') || 'Name';
+    const title = urlParams.get('file') || 'file.txt';
     const textFile = title//`${title}.txt`;
-
+    
     // Display the title as a link
     //titleElement.innerText = title.charAt(0).toUpperCase() + title.slice(1);
     titleElement.innerText = title.split('/')[title.split('/').length-1]
+    document.title = title.split('/')[title.split('/').length-1]
     titleElement.href = textFile;
 
     // Check if the title has changed
