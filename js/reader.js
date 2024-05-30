@@ -75,15 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
         text = `<b>File not found</b>
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
-        text = `<i>Tap left and right sides of the screen to "flip" pages. Use the ☰ menu to return to his page. Use ⛭ to turn on dark mode or change fonts. Mobile users: add this page to your homscreen for the best viewing experience.</i>        
+        text = `<i>Tap left and right sides of the screen to "flip" pages. Use the ☰ menu to return to this page. Use ⛭ to turn toggle dark mode on-off or change fonts. Mobile users: add this page to your homscreen for the best viewing experience.</i>        
         
-        <b>${collection_name}</b>
-        
-        `;
+        <b>${collection_name}</b>`;
 
         for (const element of text_arr) { // You can use `let` instead of `const` if you like
             if (element!="Contents") {
-                text += `<a href="?file=${element}" onClick="localStorage.setItem('${element}-currentPage', 0);">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"")}</a>\n\n`;
+                text += `\n\n<a href="?file=${element}" onClick="localStorage.setItem('${element}-currentPage', 0);">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"")}</a>`;
             }
         }
 
@@ -165,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //fontSize=fontSize.value
         //lineHeight=lineHeight.value
         screenWidth= Math.floor(window.innerWidth-40)
-        screenHeight=  Math.floor(window.innerHeight-105)
+        screenHeight=  Math.floor(window.innerHeight-110)
         // Create a canvas element to measure text
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
@@ -275,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let title = "Contents"
             }
             if (text_arr[text_arr.indexOf(title)-1]) {
-                localStorage.setItem(`${text_arr[text_arr.indexOf(title)-1]}-currentPage`, 1000000000000);
+                localStorage.setItem(`${text_arr[text_arr.indexOf(title)-1]}-currentPage`, 100000000000000000);
                 window.location.href = '?file='+text_arr[text_arr.indexOf(title)-1]
             }
         }
