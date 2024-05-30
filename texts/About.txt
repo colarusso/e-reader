@@ -1,1 +1,3 @@
+<b>About</b>
+
 This collection of texts is meant to show off an e-reader I built. 

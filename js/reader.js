@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text = `<b>File not found</b>
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
-        text = `<i>Tap left and right sides of the screen to "flip" pages. Use the ☰ menu to return to his page. Use ⛭ to turn off dark mode or change fonts. Mobile users: add this page to your homscreen for the best viewing experience.</i>        
+        text = `<i>Tap left and right sides of the screen to "flip" pages. Use the ☰ menu to return to his page. Use ⛭ to turn on dark mode or change fonts. Mobile users: add this page to your homscreen for the best viewing experience.</i>        
         
         <b>Selected Works of Edgar Allan Poe</b>
         
@@ -113,10 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (localStorage.getItem('darkMode')) {
             darkMode.checked = localStorage.getItem('darkMode') === 'true';
             applyDarkMode();
-        } else {
-            darkMode.checked = true;
-            applyDarkMode();
-        }
+        }// else {
+        //    darkMode.checked = true;
+        //    applyDarkMode();
+        //}
         applySettings();
     }
 
