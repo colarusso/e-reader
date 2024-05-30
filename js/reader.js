@@ -78,13 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
         text = `<b>File not found</b>
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
-        text = `<i>Tap the sides of the screen to "flip" pages. Mobile users: add the <a href=".">root page</a> (with no parameters) to your homescreen for best viewing. Bookmaking that link, will let it rememeber where your left off reading.</i>
+        text = `<i>Tap the sides of the screen to "turn" pages. Bookmaking the <a%20href=".">root%20url</a>, with no parameters, will let you pick up where your left off. Mobile users: add to your homescreen for best UX.</i>
         
         <b>${collection_name}</b>`;
 
         for (const element of text_arr) { // You can use `let` instead of `const` if you like
             if (element!="Contents") {
-                text += `\n\n<a href="?file=${element}" onClick="localStorage.setItem('${element}-currentPage', 0);">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"")}</a>`;
+                text += `\n\n<a%20href="?file=${element}"%20onClick="localStorage.setItem('${element}-currentPage',%200);">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"").replace(/\s/g,"%20")}</a>`;
             }
         }
 
@@ -190,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Helper function to add a line to the current page
         function addLineToPage(line) {
+            line = line.replace(/\%20/g," ")
             if (currentPage.length < (linesPerPage)) {
                 currentPage.push(line);
             } else {
@@ -202,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Loop through words to build lines and pages
         words.forEach(word => {
             if (word.match(/<br>/g)){
-                //console.log(currentLine)
+                console.log(currentLine)
                 addLineToPage(currentLine);
                 //addLineToPage("<br>");
                 currentLine =  word + ' ';
@@ -213,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
                 if (testWidth > screenWidth && currentLine !== '') {
                     //console.log(screenWidth,testWidth,currentLine)
-                    //console.log(currentLine)
+                    console.log(currentLine)
                     addLineToPage(currentLine);
                     currentLine = word + ' ';
                 } else {
