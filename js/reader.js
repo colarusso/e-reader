@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Calculate the number of lines per page
         const linesPerPage = Math.floor(screenHeight / computedLineHeight);
 
-        console.log(context.font ,linesPerPage)
+        //console.log(context.font ,linesPerPage)
     
         // Split the text into words
         const words = text.split(' ');
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentPage.length < (linesPerPage)) {
                 currentPage.push(line);
             } else {
-                console.log("==========")
+                //console.log("==========")
                 pages.push(currentPage);
                 currentPage = [line.replace(/^(<br>)/,"")];
             }
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Loop through words to build lines and pages
         words.forEach(word => {
             if (word.match(/<br>/g)){
-                console.log(currentLine)
+                //console.log(currentLine)
                 addLineToPage(currentLine);
                 //addLineToPage("<br>");
                 currentLine =  word + ' ';
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
                 if (testWidth > screenWidth && currentLine !== '') {
                     //console.log(screenWidth,testWidth,currentLine)
-                    console.log(currentLine)
+                    //console.log(currentLine)
                     addLineToPage(currentLine);
                     currentLine = word + ' ';
                 } else {
@@ -305,8 +305,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (remainingMinutes<60) {
                 timeRemaining.innerText = `${remainingMinutes} mins left`;    
             } else {
-                remainingHours = (remainingMinutes/60).toFixed(1)
-                timeRemaining.innerText = `${remainingHours} hours left`;    
+                remainingHours = Math.floor(remainingMinutes/60)
+                minutesLeft = remainingMinutes % 60;
+                timeRemaining.innerText = `${remainingHours} h ${minutesLeft} m left`;    
             }
         }
     }
