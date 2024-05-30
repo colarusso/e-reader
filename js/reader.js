@@ -302,7 +302,12 @@ document.addEventListener('DOMContentLoaded', () => {
             progressPercentage.innerText = `${Math.round(progress)}%`;
             const remainingWords = pages.slice(currentPage).join(' ').split(/\s+/).length;
             const remainingMinutes = Math.ceil(remainingWords / wordsPerMinute);
-            timeRemaining.innerText = `${remainingMinutes} mins left`;    
+            if (remainingMinutes<60) {
+                timeRemaining.innerText = `${remainingMinutes} mins left`;    
+            } else {
+                remainingHours = (remainingMinutes/60).toFixed(1)
+                timeRemaining.innerText = `${remainingHours} hours left`;    
+            }
         }
     }
 
