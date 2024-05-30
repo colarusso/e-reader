@@ -69,9 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
         text = `<b>Selected Works of Edgar Allan Poe</b>
-
-        <i>You're position will be remembered for this browser within each of the texts below.</i>
         
+        <i>This browser should remember you're position in each of the following. To navigate to their beginnings or return here, use the ☰ menu. Use ⛭ to enable dark mode or change fonts.</i>        
+
         <a href="?file=texts/The Purloined Letter.txt">The Purloined Letter</a>
         
         <a href="?file=texts/The Gold-Bug.txt">The Gold-Bug</a>`;
