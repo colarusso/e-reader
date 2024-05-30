@@ -177,15 +177,10 @@
         <button onclick="previousPage()">Previous</button>
         <button onclick="nextPage()">Next</button>
         -->
-        <select style="margin-bottom: 5px;" onChange="window.location.href = '?file='+this.value">
-            <option value="choose">Choose One</option>
-            <option value="contents">Contents</option>
-            <option value="texts/The Purloined Letter.txt">The Purloined Letter</option>
-            <option value="texts/The Gold-Bug.txt">The Gold-Bug</option>
-        </select>
+        <button onclick="window.location.href = '?file=contents'" style="margin-bottom: 5px;">Contents</button>
         <hr>
-        <button onclick="goToBeginning()" style="margin-bottom: 5px;">First Page in Text</button>
-        <button onclick="goToLast()">Last Page in Text</button>
+        <button onclick="goToBeginning()" style="margin-bottom: 5px;">first page in current text</button>
+        <button onclick="goToLast()">last page in current text</button>
     </div>
     <div id="controls" class="hidden">
         <label for="fontType">Font: </label>
