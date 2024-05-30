@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentLine =  word + ' ';
             } else {
                 const testLine = currentLine + word + ' ';
-                const metrics = context.measureText(testLine.replace("<br>","").replace(/\s+/," ").trim());
+                const metrics = context.measureText(testLine.replace(/<.*>/,"").replace(/\s+/," ").trim());
                 const testWidth = metrics.width;
     
                 if (testWidth > screenWidth && currentLine !== '') {
