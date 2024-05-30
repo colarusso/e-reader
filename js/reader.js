@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    const text_arr = ["Contents","texts/The Purloined Letter.txt","texts/The Gold-Bug.txt","texts/About.txt"]
+
     window.onresize = function(){ location.reload(); }
     
     const content = document.getElementById('content');
@@ -64,17 +66,19 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch((error) => {
         console.log(error);
-        titleElement.style.display = "none";
+        if (titleElement.innerText!="Contents") {
+            titleElement.style.display = "none";
+        }
         text = `<b>File not found</b>
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
-        text = `<i>Tap left and right sides of the screen to flip pages. This browser should remember you're position within sections. To navigate to their beginnings or return here, use the ☰ menu. Use ⛭ to enable dark mode or change fonts. Mobile users: add this page to your homscreen for the best viewing experience.</i>        
+        text = `<i>Tap left and right sides of the screen to "flip" pages. Use the ☰ menu to return to his page. Use ⛭ to turn off dark mode or change fonts. Mobile users: add this page to your homscreen for the best viewing experience.</i>        
         
         <b>Selected Works of Edgar Allan Poe</b>
         
-        <a href="?file=texts/The Purloined Letter.txt">The Purloined Letter</a>
+        <a href="?file=texts/The Purloined Letter.txt" onClick="localStorage.setItem('texts/The Purloined Letter.txt-currentPage', 0);">The Purloined Letter</a>
         
-        <a href="?file=texts/The Gold-Bug.txt">The Gold-Bug</a>`;
+        <a href="?file=texts/The Gold-Bug.txt" onClick="localStorage.setItem('texts/The Gold-Bug.txt-currentPage', 0);">The Gold-Bug</a>`;
 
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Paginate the error message
@@ -108,6 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (localStorage.getItem('darkMode')) {
             darkMode.checked = localStorage.getItem('darkMode') === 'true';
+            applyDarkMode();
+        } else {
+            darkMode.checked = true;
             applyDarkMode();
         }
         applySettings();
@@ -233,17 +240,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.nextPage = function() {
+        toggleInfo();
         if (currentPage < pages.length - 1) {
             displayPage(currentPage + 1);
+        } else {
+            if (document.title=="Contents"){
+                let title = "Contents"
+            }
+            console.log(!text_arr.indexOf(title))
+
+            if ((text_arr[text_arr.indexOf(title)+1])) {
+                localStorage.setItem(`${text_arr[text_arr.indexOf(title)+1]}-currentPage`, 0);
+                window.location.href = '?file='+text_arr[text_arr.indexOf(title)+1]
+            } else if (!text_arr.indexOf(title)) {
+                localStorage.setItem(`${text_arr[1]}-currentPage`, 0);
+                window.location.href = '?file='+text_arr[1]
+            }
         }
-        toggleInfo();
     }
 
     window.previousPage = function() {
+        toggleInfo();
         if (currentPage > 0) {
             displayPage(currentPage - 1);
+        } else {
+            if (document.title=="Contents"){
+                let title = "Contents"
+            }
+            if (text_arr[text_arr.indexOf(title)-1]) {
+                localStorage.setItem(`${text_arr[text_arr.indexOf(title)-1]}-currentPage`, 1000000000000);
+                window.location.href = '?file='+text_arr[text_arr.indexOf(title)-1]
+            }
         }
-        toggleInfo();
     }
 
     window.goToBeginning = function() {
@@ -320,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 remainingHours = Math.floor(remainingMinutes/60)
                 minutesLeft = remainingMinutes % 60;
-                timeRemaining.innerText = `${remainingHours} h ${minutesLeft} m left`;    
+                timeRemaining.innerText = `${remainingHours}h ${minutesLeft}m left`;    
             }
         }
     }

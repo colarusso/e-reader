@@ -150,6 +150,16 @@
             background: rgb(211, 211, 211);
             text-align: center;
         }
+        .dark-mode select {
+            opacity: 1;
+            border-radius: 3px;
+            font-size: 14px;
+            color:rgb(226, 226, 226);
+            border: 1px solid #434343;
+            padding: 3px;
+            background: rgb(65, 65, 65);
+            text-align: center;
+        }
         button {
             -webkit-appearance:none;
             opacity: 1;
@@ -159,6 +169,25 @@
             border: 1px solid #7b7b7b;
             padding: 3px;
             background: rgb(211, 211, 211);
+        }
+        .dark-mode button {
+            -webkit-appearance:none;
+            opacity: 1;
+            border-radius: 3px;
+            font-size: 14px;
+            color:rgb(226, 226, 226);
+            border: 1px solid #434343;
+            padding: 3px;
+            background: rgb(65, 65, 65);
+        }
+        .dark-mode input {
+            opacity: 1;
+            border-radius: 3px;
+            font-size: 14px;
+            color:rgb(0, 0, 0);
+            border: 1px solid #434343;
+            padding: 3px;
+            background: rgb(196, 196, 196);
         }
         hr {
             width:100%;
@@ -178,10 +207,11 @@
         <button onclick="previousPage()">Previous</button>
         <button onclick="nextPage()">Next</button>
         -->
-        <button onclick="window.location.href = '?file=Contents'" style="margin-bottom: 5px;">Contents</button>
+        <button onclick="window.location.href = '?file=Contents'" style="margin-bottom: 6px;">Contents</button>
+        <button onclick="window.location.href = '?file=texts/About.txt'" style="margin-bottom: 6px;">About</button>
         <hr>
-        <button onclick="goToBeginning()" style="margin-bottom: 5px;">first page in current text</button>
-        <button onclick="goToLast()">last page in current text</button>
+        <button onclick="goToBeginning()" style="margin-bottom: 6px;">first page in current selection</button>
+        <button onclick="goToLast()">last page in current selection</button>
     </div>
     <div id="controls" class="hidden">
         <label for="fontType">Font: </label>
