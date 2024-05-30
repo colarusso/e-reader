@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //titleElement.innerText = title.charAt(0).toUpperCase() + title.slice(1);
     titleElement.innerText = title.split('/')[title.split('/').length-1]
     document.title = title.split('/')[title.split('/').length-1]
-    titleElement.href = textFile;
+    titleElement.href = textFile;    
 
     // Check if the title has changed
     //if (localStorage.getItem('currentTitle') !== title) {
@@ -64,9 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch((error) => {
         console.log(error);
+        titleElement.style.display = "none";
         text = `<b>File not found</b>
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
+        text = `<b>Selected Works of Edgar Allan Poe</b>
+        
+        <a href="?file=texts/The Purloined Letter.txt">The Purloined Letter</a>
+        
+        <a href="?file=texts/The Gold-Bug.txt">The Gold-Bug</a>`;
+
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Paginate the error message
         displayPage(currentPage);
@@ -227,20 +234,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentPage < pages.length - 1) {
             displayPage(currentPage + 1);
         }
+        toggleInfo();
     }
 
     window.previousPage = function() {
         if (currentPage > 0) {
             displayPage(currentPage - 1);
         }
+        toggleInfo();
     }
 
     window.goToBeginning = function() {
         displayPage(0);
+        toggleInfo();
     }
 
     window.goToLast = function() {
         displayPage(pages.length - 1);
+        toggleInfo();
     }
 
     window.handleContentClick = function(event) {
