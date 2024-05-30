@@ -68,10 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
         text = `<b>File not found</b>
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
-        text = `<b>Selected Works of Edgar Allan Poe</b>
+        text = `<i>Tap left and right sides of the screen to flip pages. This browser should remember you're position within sections. To navigate to their beginnings or return here, use the ☰ menu. Use ⛭ to enable dark mode or change fonts. Mobile users: add this page to your homscreen for the best viewing experience.</i>        
         
-        <i>This browser should remember you're position in each of the following. To navigate to their beginnings or return here, use the ☰ menu. Use ⛭ to enable dark mode or change fonts.</i>        
-
+        <b>Selected Works of Edgar Allan Poe</b>
+        
         <a href="?file=texts/The Purloined Letter.txt">The Purloined Letter</a>
         
         <a href="?file=texts/The Gold-Bug.txt">The Gold-Bug</a>`;
