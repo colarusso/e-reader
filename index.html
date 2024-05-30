@@ -116,6 +116,11 @@
             padding: 15px 20px;
             background-color: #fff;
             display: flex;
+            position: absolute;
+            bottom:0;
+            left:0;
+            right:0;
+            top: calc(100dvh - 45px);
             justify-content: space-between;
             align-items: center;
             font-size: 14px;
@@ -125,12 +130,6 @@
         }
         .hidden {
             display: none;
-        }
-
-        @media screen and (max-width: 767px) {
-            _::-webkit-full-page-media, _:future, :root .safari_only {
-                padding-bottom: 65px; //resize 
-            }
         }
     </style>
 </head>
@@ -170,7 +169,7 @@
         <button onclick="goToLast()">Last Page</button>
     </div>
     <div id="content" onclick="handleContentClick(event)"></div>
-    <footer class="safari_only">
+    <footer>
         <span id="progressPercentage">0%</span>
         <span id="timeRemaining">0 mins left</span>
     </footer>
