@@ -24,7 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get title from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const title = urlParams.get('file') || 'file.txt';
+    const title = urlParams.get('file') || localStorage.getItem('lastSelection') || "Contents";
+
+    localStorage.setItem('lastSelection', title);
+
     const textFile = title//`${title}.txt`;
     
     // Display the title as a link
@@ -75,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text = `<b>File not found</b>
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
-        text = `<i>Tap left and right sides of the screen to "flip" pages. Use the ☰ menu to return to this page. Use ⛭ to turn toggle dark mode on-off or change fonts. Mobile users: add this page to your homscreen for the best viewing experience.</i>        
+        text = `<i>Tap left and right sides of the screen to "flip" pages. Use the ☰ menu to return to this page. Use ⛭ to turn toggle dark mode on-off or change fonts. Mobile users: add the <a href=".">root page</a> to your homescreen (with no parameters) for the best viewing experience. This will ensure it rememebers your location.</i>
         
         <b>${collection_name}</b>`;
 
