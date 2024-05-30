@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    const collection_name = "Selected Works of Edgar Allan Poe"
     const text_arr = ["Contents","texts/The Purloined Letter.txt","texts/The Gold-Bug.txt","texts/About.txt"]
 
     window.onresize = function(){ location.reload(); }
@@ -28,9 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Display the title as a link
     //titleElement.innerText = title.charAt(0).toUpperCase() + title.slice(1);
-    titleElement.innerText = title.split('/')[title.split('/').length-1]
-    document.title = title.split('/')[title.split('/').length-1]
-    titleElement.href = textFile;    
+    titleElement.innerText = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
+    document.title = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
+    if (title!="Contents") {
+        titleElement.href = textFile;    
+    }
 
     // Check if the title has changed
     //if (localStorage.getItem('currentTitle') !== title) {
@@ -74,11 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
         text = `<i>Tap left and right sides of the screen to "flip" pages. Use the ☰ menu to return to his page. Use ⛭ to turn on dark mode or change fonts. Mobile users: add this page to your homscreen for the best viewing experience.</i>        
         
-        <b>Selected Works of Edgar Allan Poe</b>
+        <b>${collection_name}</b>
         
-        <a href="?file=texts/The Purloined Letter.txt" onClick="localStorage.setItem('texts/The Purloined Letter.txt-currentPage', 0);">The Purloined Letter</a>
-        
-        <a href="?file=texts/The Gold-Bug.txt" onClick="localStorage.setItem('texts/The Gold-Bug.txt-currentPage', 0);">The Gold-Bug</a>`;
+        `;
+
+        for (const element of text_arr) { // You can use `let` instead of `const` if you like
+            if (element!="Contents") {
+                text += `<a href="?file=${element}" onClick="localStorage.setItem('${element}-currentPage', 0);">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"")}</a>\n\n`;
+            }
+        }
 
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Paginate the error message
