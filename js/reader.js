@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const collection_name = "Selected Works of Edgar Allan Poe"
-    const text_arr = ["Contents","texts/The Purloined Letter.txt","texts/The Gold-Bug.txt","texts/About.txt"]
+    //const collection_name = "Selected Works of Edgar Allan Poe"
+    const text_arr = ["texts/Cover.txt","Contents","texts/The Purloined Letter.txt","texts/The Gold-Bug.txt","texts/About.txt"]
 
     window.onresize = function(){ location.reload(); }
     
@@ -80,12 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
         text = `<i>Tap left or right to "turn" pages. Bookmaking the <a%20href=".">root </a><a%20href=".">url</a>, with no parameters, let's you pick up where your left off. Mobile users: add to your homescreen for best UX.</i>
         
-        <b>${collection_name}</b>`;
+        <center><b>~ Contents ~</b></center>`;
+        //<b>${collection_name}</b>`;
 
         for (const element of text_arr) { // You can use `let` instead of `const` if you like
-            if (element!="Contents") {
+            if (element!="Contents" && element!="texts/Cover.txt") {
                 element_parts = element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"").split(" ");
-                text += `\n\n`;
+                text += `\n`;
                 for (const part of element_parts) {
                     text += `<a%20href="?file=${element.replace(/\s/i,"%20")}"%20onClick="localStorage.setItem('${element.replace(/\s/g,"%20")}-currentPage',%200);">${part} </a>`;
                 }
