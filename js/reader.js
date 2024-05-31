@@ -142,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
         content.style.fontSize = fontSize.value + 'px';
         content.style.lineHeight = lineHeight.value;
         content.style.textAlign = textAlign.value;
-        //content.style.textAlignLast = textAlign.value;
         paginateAndDisplay();
     }
 
@@ -159,8 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
         saveSettings();
         if (pages.length > 0) {
             pages = paginateText(document.getElementById("text_container").value);
-            displayPage(currentPage);
             updateProgress();
+            displayPage(currentPage);  
         }
     }
 
@@ -199,6 +198,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Helper function to add a line to the current page
         function addLineToPage(line) {
             line = line.replace(/\%20/g," ")
+            if (!line.match(/<.+>/)){
+                line = line.replace(/-/g,"&#8209;")                
+                line = line.replace(/—/g,"&#8209;")                
+            }
             if (currentPage.length < (linesPerPage)) {
                 if ((currentPage.length>0) && (currentPage[currentPage.length-1].replace(/\s|<br>/,"").length>0)) {
                     console.log(line)
@@ -208,7 +211,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentPage.push(line.replace(/^(<br>)/,""));
                 } 
             } else {
-                console.log("==== page break ====")
+                var found_br = 0;
+                for (var i = currentPage.length-1; i > 0; i--) {
+                    if (currentPage[i].match(/<br>/) && !line.match(/^(<br>)/)) {
+                        currentPage[i] = currentPage[i].replace(/(.*)(<br>(.*))$/, '$1<br><div class="last_span">$3');
+                        currentPage[currentPage.length-1] = currentPage[currentPage.length-1]+'</div>';
+                        var found_br = 1;
+                        break    
+                    }
+                }
+                if (found_br==0 && !line.match(/^(<br>)/)) {
+                    currentPage[0] = '<div class="last_span">'+currentPage[0]
+                    currentPage[currentPage.length-1] = currentPage[currentPage.length-1]+'</div>';
+                }
+                //currentPage[currentPage.length-1] = '<div id="last_span">'+currentPage[currentPage.length-1]+'</div>'
+                console.log("==== page break ("+pages.length+") ====")
                 console.log(line)
                 pages.push(currentPage);
                 currentPage = [line.replace(/^(<br>)/,"")];
@@ -263,7 +280,11 @@ document.addEventListener('DOMContentLoaded', () => {
             content.innerHTML = pages[pageIndex].join('');
             currentPage = pageIndex;
             //localStorage.setItem('currentPage', currentPage);
-            localStorage.setItem(`${title}-currentPage`, currentPage);            
+            localStorage.setItem(`${title}-currentPage`, currentPage);   
+            var elements = document.querySelectorAll('.last_span');
+            for(var i=0; i<elements.length; i++){
+                elements[i].style.textAlignLast = textAlign.value;
+            }           
             updateProgress();
         }
     }
