@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text = `<b>File not found</b>
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
-        text = `<i>Tap left or right to "turn" pages. Bookmaking the <a%20href=".">root </a><a%20href=".">url</a>, with no parameters, let's you pick up where your left off. Mobile users: add to your homescreen for best UX.</i>
+        text = `<i>Tap to "turn" pages. Bookmark the <a%20href=".">root </a><a%20href=".">url</a>, with no parameters, to have this browser remember your place. Mobile users: add to your homescreen for best UX.</i>
         
         <center><b>~ Contents ~</b></center>`;
         //<b>${collection_name}</b>`;
@@ -159,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
         saveSettings();
         if (pages.length > 0) {
             pages = paginateText(document.getElementById("text_container").value);
-            //window.location.href = ''
             displayPage(currentPage);
             updateProgress();
         }
@@ -201,9 +200,16 @@ document.addEventListener('DOMContentLoaded', () => {
         function addLineToPage(line) {
             line = line.replace(/\%20/g," ")
             if (currentPage.length < (linesPerPage)) {
-                currentPage.push(line);
+                if ((currentPage.length>0) && (currentPage[currentPage.length-1].replace(/\s|<br>/,"").length>0)) {
+                    console.log(line)
+                    currentPage.push(line);
+                } else {
+                    console.log(line.replace(/^(<br>)/,""))
+                    currentPage.push(line.replace(/^(<br>)/,""));
+                } 
             } else {
-                //console.log("==========")
+                console.log("==== page break ====")
+                console.log(line)
                 pages.push(currentPage);
                 currentPage = [line.replace(/^(<br>)/,"")];
             }
@@ -211,10 +217,16 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Loop through words to build lines and pages
         words.forEach(word => {
-            if (word.match(/<br>/g)){
-                console.log(currentLine)
+            if (word.match(/<img/i)) {
+                if (currentPage.length>0) {
+                    pages.push(currentPage);
+                    currentPage = [];    
+                }
+                addLineToPage(word);
+                pages.push(currentPage);
+                currentPage = [];
+            } else if (word.match(/<br>/g)){
                 addLineToPage(currentLine);
-                //addLineToPage("<br>");
                 currentLine =  word + ' ';
             } else {
                 const testLine = currentLine + word + ' ';
@@ -223,7 +235,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
                 if (testWidth > screenWidth && currentLine !== '') {
                     //console.log(screenWidth,testWidth,currentLine)
-                    console.log(currentLine)
                     addLineToPage(currentLine);
                     currentLine = word + ' ';
                 } else {
