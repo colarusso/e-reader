@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text = `<b>File not found</b>
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
-        text = `<i>Tap left or right "turn" pages. Bookmaking the <a%20href=".">root%20url</a>, with no parameters, will let you pick up where your left off. Mobile users: add to your homescreen for best UX.</i>
+        text = `<i>Tap left or right to "turn" pages. Bookmaking the <a%20href=".">root </a><a%20href=".">url</a>, with no parameters, let's you pick up where your left off. Mobile users: add to your homescreen for best UX.</i>
         
         <b>${collection_name}</b>`;
 
