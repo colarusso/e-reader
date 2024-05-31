@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     //titleElement.innerText = title.charAt(0).toUpperCase() + title.slice(1);
     titleElement.innerText = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
     document.title = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
-    if (title!="Contents") {
-        titleElement.href = textFile;    
-    }
+    //if (title!="Contents") {
+    //    titleElement.href = textFile;    
+    //}
 
     // Check if the title has changed
     //if (localStorage.getItem('currentTitle') !== title) {
@@ -78,13 +78,17 @@ document.addEventListener('DOMContentLoaded', () => {
         text = `<b>File not found</b>
         
         Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
-        text = `<i>Tap the sides of the screen to "turn" pages. Bookmaking the <a%20href=".">root%20url</a>, with no parameters, will let you pick up where your left off. Mobile users: add to your homescreen for best UX.</i>
+        text = `<i>Tap left or right "turn" pages. Bookmaking the <a%20href=".">root%20url</a>, with no parameters, will let you pick up where your left off. Mobile users: add to your homescreen for best UX.</i>
         
         <b>${collection_name}</b>`;
 
         for (const element of text_arr) { // You can use `let` instead of `const` if you like
             if (element!="Contents") {
-                text += `\n\n<a%20href="?file=${element}"%20onClick="localStorage.setItem('${element}-currentPage',%200);">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"").replace(/\s/g,"%20")}</a>`;
+                element_parts = element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"").split(" ");
+                text += `\n\n`;
+                for (const part of element_parts) {
+                    text += `<a%20href="?file=${element.replace(/\s/i,"%20")}"%20onClick="localStorage.setItem('${element.replace(/\s/g,"%20")}-currentPage',%200);">${part} </a>`;
+                }
             }
         }
 
@@ -94,6 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateProgress();        
     });
 
+    document.getElementById("information").innerHTML = "";
+    for (const element of text_arr) { // You can use `let` instead of `const` if you like
+        document.getElementById("information").innerHTML += `<button onclick="localStorage.setItem('${element}-currentPage', 0);window.location.href = '?file=${element}'" style="margin-bottom: 6px;">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"")}</button>`
+    }
 
     function saveSettings() {
         localStorage.setItem('fontType', fontType.value);
@@ -352,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
             progressPercentage.innerText = `${Math.round(progress)}%`;
             const remainingWords = pages.slice(currentPage).join(' ').split(/\s+/).length;
             const remainingMinutes = Math.ceil(remainingWords / wordsPerMinute);
-            if (remainingMinutes<60) {
+            if (remainingMinutes<=60) {
                 timeRemaining.innerText = `${remainingMinutes} mins left`;    
             } else {
                 remainingHours = Math.floor(remainingMinutes/60)
