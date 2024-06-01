@@ -397,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
             document.getElementById("bookmark").classList.add("bookmarked");
         }
-        console.log(bookmarks)
+        //console.log(bookmarks)
         displayPage(currentPage);
     }
 
@@ -476,19 +476,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     e = e || window.event;
 
-    if (e.keyCode == '38') {
-        // up arrow
+    if (e.keyCode == '66') {
+        // b
+        toggleBookmark();
     }
-    else if (e.keyCode == '40') {
-        // down arrow
+    else if (e.keyCode == '49') {
+        // 1
+        controls.style.display = "none";
+        applySettings();
+        toggleInfo();
+        document.getElementById("jumpto").focus();
+    }
+    else if (e.keyCode == '50') {
+        // 2
+        information.style.display = "none";
+        toggleSettings();
+        document.getElementById("fontType").focus();
     }
     else if (e.keyCode == '37') {
-        previousPage();
        // left arrow
+       previousPage();
     }
     else if (e.keyCode == '39') {
-        nextPage();
        // right arrow
+       nextPage();
     }
 
 }
