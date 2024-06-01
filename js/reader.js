@@ -351,7 +351,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentPage > 0) {
             displayPage(currentPage - 1);
         } else {
-            console.log(title,text_arr.indexOf(title),!text_arr.indexOf(title))
             if (text_arr.indexOf(title)>=0) {
                 this_title = title
             } else {
