@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let currentProg = (urlParams.get('prog')) || currentPage/currentLength;
     if (currentProg>1){
-        currentProg = 1;
+        currentProg = 0.999999999999;
     }
     currentPage = Math.floor(currentLength*currentProg);
     //console.log(currentProg,currentLength,currentPage,Math.floor(currentLength*currentProg))
