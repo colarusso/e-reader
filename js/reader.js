@@ -290,26 +290,31 @@ document.addEventListener('DOMContentLoaded', () => {
         end_of_page = pageIndex/localStorage.getItem("currentLength")+1/localStorage.getItem("currentLength");
         bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || {};
         document.getElementById('jumptobookmaks').options.length = 1;
+        ordered_sections = []
         for (const [key, value0] of Object.entries(bookmarks)) {
-            const ordered = Object.keys(bookmarks[key]).sort().reduce(
-                (obj, subkey) => { 
-                  obj[subkey] = bookmarks[key][subkey]; 
-                  return obj;
-                }, 
-                {}
-            );
-            console.log(bookmarks[key],ordered)
-            for (const [mark, value1] of Object.entries(ordered)) {
-                if (key==title && start_of_page<=mark && mark<end_of_page) {
-                   this_page_marked = 1;
-                   window.markpoint = mark;
-                }
-                var option = document.createElement("option");
-                preview = ordered[mark];
-                option.text = `${key.split('/')[key.split('/').length-1].replace(/\.txt$/i,"")}: ${preview}`.slice(0, 45)+"...";
-                option.value = `?file=${key}&prog=${mark}`;
-                var select = document.getElementById("jumptobookmaks");
-                select.appendChild(option);
+            ordered_sections[text_arr.indexOf(key)] = key;
+        }
+        for (entry of ordered_sections){
+            if (entry) {
+                const ordered = Object.keys(bookmarks[entry]).sort().reduce(
+                    (obj, subkey) => { 
+                      obj[subkey] = bookmarks[entry][subkey]; 
+                      return obj;
+                    }, 
+                    {}
+                );
+                for (const [mark, value1] of Object.entries(ordered)) {
+                    if (entry==title && start_of_page<=mark && mark<end_of_page) {
+                       this_page_marked = 1;
+                       window.markpoint = mark;
+                    }
+                    var option = document.createElement("option");
+                    preview = ordered[mark];
+                    option.text = `${entry.split('/')[entry.split('/').length-1].replace(/\.txt$/i,"")}: ${preview}`.slice(0, 45)+"...";
+                    option.value = `?file=${entry}&prog=${mark}`;
+                    var select = document.getElementById("jumptobookmaks");
+                    select.appendChild(option);
+                }    
             }
         }
 
