@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    //const collection_name = "Selected Works of Edgar Allan Poe"
+    const collection_name = "Selected Works of Edgar Allan Poe"
     const text_arr = ["texts/Cover.txt","Contents","texts/The Purloined Letter.txt","texts/The Gold-Bug.txt","texts/About.txt"]
 
     window.onresize = function(){ location.reload(); }
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Display the title as a link
     //titleElement.innerText = title.charAt(0).toUpperCase() + title.slice(1);
     titleElement.innerText = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
-    document.title = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
+    document.title = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"") + " | " + collection_name
     //if (title!="Contents") {
     //    titleElement.href = textFile;    
     //}
@@ -48,6 +48,15 @@ document.addEventListener('DOMContentLoaded', () => {
     //}
     //let currentPage = 0;
     let currentPage = parseInt(localStorage.getItem(`${title}-currentPage`), 10) || 0;
+    let currentLength = parseInt(localStorage.getItem(`${title}-currentLength`), 10) || 1;
+    localStorage.setItem('currentLength', currentLength);
+    
+    let currentProg = (urlParams.get('prog')) || currentPage/currentLength;
+    if (currentProg>1){
+        currentProg = 1;
+    }
+    currentPage = Math.floor(currentLength*currentProg);
+    console.log(currentProg,currentLength,currentPage,Math.floor(currentLength*currentProg))
 
     // Load settings from local storage
     loadSettings();
@@ -68,20 +77,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Dynamically paginate text
         displayPage(currentPage);
-        updateProgress();
+        //updateProgress();
     })
     .catch((error) => {
         console.log(error);
         if (titleElement.innerText!="Contents") {
-            titleElement.style.display = "none";
+            titleElement.innerText = "Contents"
+            //titleElement.style.display = "none";
         }
-        text = `<b>File not found</b>
-        
-        Make sure you have a file name specified in the url. The URL should end with something that looks like this: <i style="white-space: nowrap;">?file=file_name.txt</i>`;
         text = `<i>Tap to "turn" pages. Bookmark the <a%20href=".">root </a><a%20href=".">url</a>, with no parameters, to have this browser remember your place. Mobile users: add to your homescreen for best UX.</i>
         
         <center><b>~ Contents ~</b></center>`;
-        //<b>${collection_name}</b>`;
 
         for (const element of text_arr) { // You can use `let` instead of `const` if you like
             if (element!="Contents" && element!="texts/Cover.txt") {
@@ -96,10 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Paginate the error message
         displayPage(currentPage);
-        updateProgress();        
+        //updateProgress();
+        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.pushState({path:newurl},'',newurl);    
     });
 
-    document.getElementById("information").innerHTML = "";
+    //document.getElementById("information").innerHTML = "";
     for (const element of text_arr) { // You can use `let` instead of `const` if you like
         document.getElementById("information").innerHTML += `<button onclick="localStorage.setItem('${element}-currentPage', 0);window.location.href = '?file=${element}'" style="margin-bottom: 6px;">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"")}</button>`
     }
@@ -158,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveSettings();
         if (pages.length > 0) {
             pages = paginateText(document.getElementById("text_container").value);
-            updateProgress();
+            //updateProgress();
             displayPage(currentPage);  
         }
     }
@@ -204,10 +212,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (currentPage.length < (linesPerPage)) {
                 if ((currentPage.length>0) && (currentPage[currentPage.length-1].replace(/\s|<br>/,"").length>0)) {
-                    console.log(line)
+                    //console.log(line)
                     currentPage.push(line);
                 } else {
-                    console.log(line.replace(/^(<br>)/,""))
+                    //console.log(line.replace(/^(<br>)/,""))
                     currentPage.push(line.replace(/^(<br>)/,""));
                 } 
             } else {
@@ -224,9 +232,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentPage[0] = '<div class="last_span">'+currentPage[0]
                     currentPage[currentPage.length-1] = currentPage[currentPage.length-1]+'</div>';
                 }
-                //currentPage[currentPage.length-1] = '<div id="last_span">'+currentPage[currentPage.length-1]+'</div>'
-                console.log("==== page break ("+pages.length+") ====")
-                console.log(line)
+                //console.log("==== page break ("+pages.length+") ====")
+                //console.log(line)
                 pages.push(currentPage);
                 currentPage = [line.replace(/^(<br>)/,"")];
             }
@@ -271,11 +278,38 @@ document.addEventListener('DOMContentLoaded', () => {
             pages.push(currentPage);
         }
     
+        localStorage.setItem(`${title}-currentLength`, pages.length);
+        localStorage.setItem('currentLength', pages.length);
         return pages;
     }
     
+    window.displayPage = function(pageIndex) {
+        this_page_marked = 0;
+        start_of_page = pageIndex/localStorage.getItem("currentLength");
+        end_of_page = pageIndex/localStorage.getItem("currentLength")+1/localStorage.getItem("currentLength");
+        bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || {};
+        document.getElementById('jumptobookmaks').options.length = 1;
+        for (const [key, value0] of Object.entries(bookmarks)) {
+            for (const [mark, value1] of Object.entries(bookmarks[key])) {
+                if (key==title && start_of_page<=mark && mark<end_of_page) {
+                   this_page_marked = 1;
+                   window.markpoint = mark;
+                }
+                var option = document.createElement("option");
+                preview = bookmarks[key][mark];
+                option.text = `${key.split('/')[key.split('/').length-1].replace(/\.txt$/i,"")}: ${preview}`.slice(0, 45)+"...";
+                option.value = `?file=${key}&prog=${mark}`;
+                var select = document.getElementById("jumptobookmaks");
+                select.appendChild(option);
+            }
+        }
 
-    function displayPage(pageIndex) {
+        if (this_page_marked==1) {
+            document.getElementById("bookmark").classList.add("bookmarked");
+        } else {
+            document.getElementById("bookmark").classList.remove("bookmarked");
+        }
+
         if (pageIndex >= 0 && pageIndex < pages.length) {
             content.innerHTML = pages[pageIndex].join('');
             currentPage = pageIndex;
@@ -290,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.nextPage = function() {
-        toggleInfo();
+        //toggleInfo();
         if (currentPage < pages.length - 1) {
             displayPage(currentPage + 1);
         } else {
@@ -310,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.previousPage = function() {
-        toggleInfo();
+        //toggleInfo();
         if (currentPage > 0) {
             displayPage(currentPage - 1);
         } else {
@@ -318,20 +352,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 let title = "Contents"
             }
             if (text_arr[text_arr.indexOf(title)-1]) {
-                localStorage.setItem(`${text_arr[text_arr.indexOf(title)-1]}-currentPage`, 100000000000000000);
-                window.location.href = '?file='+text_arr[text_arr.indexOf(title)-1]
+                //localStorage.setItem(`${text_arr[text_arr.indexOf(title)-1]}-currentPage`, 10000000000000000);
+                window.location.href = '?file='+text_arr[text_arr.indexOf(title)-1]+'&prog=0.999999999999'
             }
         }
     }
 
     window.goToBeginning = function() {
         displayPage(0);
-        toggleInfo();
+        //toggleInfo();
     }
 
     window.goToLast = function() {
         displayPage(pages.length - 1);
-        toggleInfo();
+        //toggleInfo();
     }
 
     window.handleContentClick = function(event) {
@@ -348,6 +382,25 @@ document.addEventListener('DOMContentLoaded', () => {
         //}
     }
 
+    window.toggleBookmark = function() {
+        bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || {};
+        this_sections_bookmarks = bookmarks[title] || {}
+        //console.log(bookmarks)
+        if (document.getElementById("bookmark").classList.contains("bookmarked")) {
+            delete this_sections_bookmarks[window.markpoint];
+            bookmarks[title] = this_sections_bookmarks
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            document.getElementById("bookmark").classList.remove("bookmarked");
+        } else {
+            this_sections_bookmarks[currentPage/localStorage.getItem("currentLength")] = pages[currentPage].join(" ").replace(/<[^>]*>/g,"").replace(/\s+/g," ").replace("&#8209;","-").slice(0, 50); 
+            bookmarks[title] = this_sections_bookmarks
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            document.getElementById("bookmark").classList.add("bookmarked");
+        }
+        console.log(bookmarks)
+        displayPage(currentPage);
+    }
+
     window.toggleSettings = function() {
         if (controls.style.display === "none" || controls.style.display === "") {
             controls.style.display = "flex";
@@ -358,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.toggleInfo = function() {
+        document.getElementById("jumpto").value = ((currentPage / (pages.length - 1)) * 100);
         if (information.style.display === "none" || information.style.display === "") {
             information.style.display = "flex";
         } else {
@@ -385,6 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateProgress() {
         const progress = ((currentPage / (pages.length - 1)) * 100);
         if (progress>100){
+            progress = 100;
             displayPage(pages.length - 1);
         } else if (isNaN(progress)) {
             progressPercentage.innerText = `100%`;
@@ -401,7 +456,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 timeRemaining.innerText = `${remainingHours}h ${minutesLeft}m left`;    
             }
         }
+        if (title=="Contents") {
+            var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        } else {
+            if (isNaN(progress)){
+                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+0;
+            } else if (progress>100) {
+                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+1;
+            } else {
+                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+progress/100;
+            }    
+        }
+        window.history.pushState({path:newurl},'',newurl);    
     }
+
+    document.onkeydown = checkKey;
+
+    function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38') {
+        // up arrow
+    }
+    else if (e.keyCode == '40') {
+        // down arrow
+    }
+    else if (e.keyCode == '37') {
+        previousPage();
+       // left arrow
+    }
+    else if (e.keyCode == '39') {
+        nextPage();
+       // right arrow
+    }
+
+}
 
     
 });

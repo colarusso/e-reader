@@ -26,7 +26,7 @@
         }
         img {
             width:100%;
-            height:90%;
+            height:80%;
             object-fit: contain;
             overflow: hidden;
         }
@@ -216,9 +216,33 @@
             border-bottom: 1px solid #787878;
             margin-bottom: 15px;
         }
+        .bookmark-icon {
+            position: absolute;
+            cursor: pointer;
+            top:-10px;
+            right:50px;
+            z-index: 2000;
+            width: 20px;
+            height: 40px;
+            background-color: #d5d5d5;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%);
+        }
+        .dark-mode .bookmark-icon {
+            background-color: #666666;
+        }
+        .bookmarked {
+            background-color: #d50d0d;
+            top:0px;
+            height: 40px;
+        }
+        .dark-mode .bookmarked {
+            background-color: #d50d0d;
+            height: 40px;
+        }
     </style>
 </head>
 <body>
+    <div id="bookmark" class="bookmark-icon"  onClick="toggleBookmark()"></div>
     <div id="settingsToggleRow">
         <button id="infoToggle" onclick="toggleInfo()">☰</button>
         <a id="title" target="_blank"></a>
@@ -229,8 +253,13 @@
         <button onclick="previousPage()">Previous</button>
         <button onclick="nextPage()">Next</button>
         -->
-        <button onclick="localStorage.setItem('Contents-currentPage', 0);window.location.href = '?file=Contents'" style="margin-bottom: 6px;">Contents</button>
-        <button onclick="localStorage.setItem('About.txt-currentPage', 0);window.location.href = '?file=texts/About.txt'" style="margin-bottom: 6px;">About</button>
+        Jump to location in current section
+        <input type="range" min="0" max="100" value="50" class="slider" id="jumpto" onChange="displayPage(Math.round(this.value/100*localStorage.getItem(`currentLength`)))">
+        <hr>
+        <select id="jumptobookmaks" style="margin-bottom: 6px;text-align: left;" onChange="window.location.href=this.value">
+            <option value=null>Bookmark</option>
+        </select>
+        <hr>
         <!--
         <hr>
         <button onclick="goToBeginning()" style="margin-bottom: 6px;">first page in current</button>
