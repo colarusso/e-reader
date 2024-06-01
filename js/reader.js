@@ -526,6 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.deleteBookmarks = function() {
         let text;
         if (confirm("Press OK to delete all bookmarks.") == true) {
+            document.getElementById("bookmark").classList.remove("bookmarked");
             document.getElementById('jumptobookmaks').options.length = 1;
             localStorage.removeItem("bookmarks");
         }
