@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentProg = 1;
     }
     currentPage = Math.floor(currentLength*currentProg);
-    console.log(currentProg,currentLength,currentPage,Math.floor(currentLength*currentProg))
+    //console.log(currentProg,currentLength,currentPage,Math.floor(currentLength*currentProg))
 
     // Load settings from local storage
     loadSettings();
