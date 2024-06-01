@@ -83,9 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(error);
         if (titleElement.innerText!="Contents") {
             titleElement.innerText = "Contents"
+            document.title = "Contents" + " | " + collection_name
             //titleElement.style.display = "none";
         }
-        text = `<i>Tap to "turn" pages. Bookmark the <a%20href=".">root </a><a%20href=".">url</a>, with no parameters, to have this browser remember your place. Mobile users: add to your homescreen for best UX.</i>
+        text = `<i>Tap to "turn" pages. Bookmark <a%20href=".">this </a><a%20href=".">page</a> to have this browser remember your place. Mobile users: add to your homescreen for best UX.</i>
         
         <center><b>~ Contents ~</b></center>`;
 
@@ -328,15 +329,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentPage < pages.length - 1) {
             displayPage(currentPage + 1);
         } else {
-            if (document.title=="Contents"){
-                let title = "Contents"
-            }
-            console.log(!text_arr.indexOf(title))
 
-            if ((text_arr[text_arr.indexOf(title)+1])) {
-                localStorage.setItem(`${text_arr[text_arr.indexOf(title)+1]}-currentPage`, 0);
-                window.location.href = '?file='+text_arr[text_arr.indexOf(title)+1]
-            } else if (!text_arr.indexOf(title)) {
+            if (text_arr.indexOf(title)>=0) {
+                this_title = title
+            } else {
+                this_title = "Contents"
+            }
+
+            if ((text_arr[text_arr.indexOf(this_title)+1])) {
+                localStorage.setItem(`${text_arr[text_arr.indexOf(this_title)+1]}-currentPage`, 0);
+                window.location.href = '?file='+text_arr[text_arr.indexOf(this_title)+1]
+            } else if (!text_arr.indexOf(this_title)) {
                 localStorage.setItem(`${text_arr[1]}-currentPage`, 0);
                 window.location.href = '?file='+text_arr[1]
             }
@@ -348,12 +351,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentPage > 0) {
             displayPage(currentPage - 1);
         } else {
-            if (document.title=="Contents"){
-                let title = "Contents"
+            console.log(title,text_arr.indexOf(title),!text_arr.indexOf(title))
+            if (text_arr.indexOf(title)>=0) {
+                this_title = title
+            } else {
+                this_title = "Contents"
             }
-            if (text_arr[text_arr.indexOf(title)-1]) {
-                //localStorage.setItem(`${text_arr[text_arr.indexOf(title)-1]}-currentPage`, 10000000000000000);
-                window.location.href = '?file='+text_arr[text_arr.indexOf(title)-1]+'&prog=0.999999999999'
+
+            if (text_arr[text_arr.indexOf(this_title)-1]) {
+                //localStorage.setItem(`${text_arr[text_arr.indexOf(this_title)-1]}-currentPage`, 10000000000000000);
+                window.location.href = '?file='+text_arr[text_arr.indexOf(this_title)-1]+'&prog=0.999999999999'
             }
         }
     }
