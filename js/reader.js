@@ -493,35 +493,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkKey(e) {
 
-    e = e || window.event;
+        e = e || window.event;
 
-    if (e.keyCode == '66') {
-        // b
-        toggleBookmark();
-    }
-    else if (e.keyCode == '49') {
-        // 1
-        controls.style.display = "none";
-        applySettings();
-        toggleInfo();
-        document.getElementById("jumpto").focus();
-    }
-    else if (e.keyCode == '50') {
-        // 2
-        information.style.display = "none";
-        toggleSettings();
-        document.getElementById("fontType").focus();
-    }
-    else if (e.keyCode == '37') {
-       // left arrow
-       previousPage();
-    }
-    else if (e.keyCode == '39') {
-       // right arrow
-       nextPage();
+        if (e.keyCode == '66') {
+            // b
+            toggleBookmark();
+        }
+        else if (e.keyCode == '49') {
+            // 1
+            controls.style.display = "none";
+            applySettings();
+            toggleInfo();
+            document.getElementById("jumpto").focus();
+        }
+        else if (e.keyCode == '50') {
+            // 2
+            information.style.display = "none";
+            toggleSettings();
+            document.getElementById("fontType").focus();
+        }
+        else if (e.keyCode == '37') {
+        // left arrow
+        previousPage();
+        }
+        else if (e.keyCode == '39') {
+        // right arrow
+        nextPage();
+        }
+
     }
 
-}
-
+    window.deleteBookmarks = function() {
+        let text;
+        if (confirm("Press OK to delete all bookmarks.") == true) {
+            document.getElementById('jumptobookmaks').options.length = 1;
+            localStorage.removeItem("bookmarks");
+        }
+    }
     
 });
