@@ -616,19 +616,19 @@ var sayit = function (sentences,i)
         if (speaking == 1) {
             nextPage();
         }
-	    console.log('Finished in ' + event.elapsedTime + ' seconds.');
+	    //console.log('Finished in ' + event.elapsedTime + ' seconds.');
     };
     msg.onerror = function(event)
     {
-        console.log('Errored ' + event);
+        //console.log('Errored ' + event);
     }
     msg.onpause = function (event)
     {
-        console.log('paused ' + event);
+        //console.log('paused ' + event);
     }
     msg.onboundary = function (event)
     {
-        console.log('onboundary ' + event);
+        //console.log('onboundary ' + event);
     }
     return msg;
 }
