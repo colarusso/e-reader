@@ -51,7 +51,7 @@ a  {
     font-size: 16px;
     padding: 0px;
     color: black;
-    margin-right: 20px; /* Right align the hamburger */
+    margin-right: 50px; /* Right align the hamburger */
 }
 .dark-mode #infoToggle {
     color: white;
@@ -63,14 +63,13 @@ a  {
     font-size: 16px;
     padding: 0px;
     color: black;
-    margin-left: 20px; /* Right align the hamburger */
+    margin-left: 75px; /* Right align the hamburger */
 }
 .dark-mode #settingsToggle {
     color: white;
 }
 #title {
     font-size: 13px;
-    height: 14px;
     text-align: center;
     flex: 1;
     color: #a6a6a6;

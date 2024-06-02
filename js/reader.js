@@ -34,8 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Display the title as a link
     //titleElement.innerText = title.charAt(0).toUpperCase() + title.slice(1);
-    titleElement.innerText = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
+    titleElement.innerText = "🎧 " + title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
     document.title = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"") + " | " + collection_name
+    titleElement.href = "javascript:audio_play();";  
     //if (title!="Contents") {
     // "🎧 "
     //    titleElement.href = textFile;    
@@ -86,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch((error) => {
         console.log(error);
         if (titleElement.innerText!="Contents") {
-            titleElement.innerText = "Contents"
+            titleElement.innerText = "🎧 "+"Contents"
             document.title = "Contents" + " | " + collection_name
             //titleElement.style.display = "none";
         }
@@ -331,6 +332,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (pageIndex >= 0 && pageIndex < pages.length) {
             content.innerHTML = pages[pageIndex].join('');
+            if (speaking==1){
+                talk();
+            }
             currentPage = pageIndex;
             //localStorage.setItem('currentPage', currentPage);
             localStorage.setItem(`${title}-currentPage`, currentPage);   
@@ -393,6 +397,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.handleContentClick = function(event) {
+        stop_talk();
+
         const rect = content.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const third = rect.width / 3;
@@ -436,6 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.toggleSettings = function() {
+        stop_talk();
         if (controls.style.display === "none" || controls.style.display === "") {
             controls.style.display = "flex";
         } else {
@@ -445,6 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.toggleInfo = function() {
+        stop_talk();
         document.getElementById("jumpto").value = ((currentPage / (pages.length - 1)) * 100);
         if (information.style.display === "none" || information.style.display === "") {
             information.style.display = "flex";
@@ -588,3 +596,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
+
+var voices = window.speechSynthesis.getVoices();
+
+var speaking = 0;
+
+var sayit = function (sentences,i)
+{
+    var msg = new SpeechSynthesisUtterance();
+
+    msg.voiceURI = 'native';
+    msg.volume = 1; // 0 to 1
+    msg.rate = localStorage.getItem('wpm')/175; //$('#rate').val(); // 0.1 to 10
+    msg.pitch = 1; //0 to 2
+    msg.lang = 'en-US' //$('#lang').val();
+    msg.onstart = function (event) {
+    };
+    msg.onend = function(event) {
+        if (speaking == 1) {
+            nextPage();
+        }
+	    console.log('Finished in ' + event.elapsedTime + ' seconds.');
+    };
+    msg.onerror = function(event)
+    {
+        console.log('Errored ' + event);
+    }
+    msg.onpause = function (event)
+    {
+        console.log('paused ' + event);
+    }
+    msg.onboundary = function (event)
+    {
+        console.log('onboundary ' + event);
+    }
+    return msg;
+}
+
+var talk = function () {
+    speaking = 1;
+
+	speechSynthesis.cancel(); // if it errors, this clears out the error.
+    
+	var sentences = "";
+    var sentences = content.innerText.split(/[^\w\s'",]+-/);
+    
+    for (var i=0;i< sentences.length;i++)
+    {
+		var toSay = sayit(sentences,i);
+		toSay.text = sentences[i];
+		speechSynthesis.speak(toSay);
+    }
+}
+
+var stop_talk = function () {
+
+    speaking = 0;
+    speechSynthesis.cancel();
+
+}
+
+var audio_play = function () {
+    if (speaking == 0) {
+        talk();
+    } else {
+        stop_talk();
+    }
+}

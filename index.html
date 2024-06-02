@@ -10,15 +10,13 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/green-audio-player.css">
-    <script src="js/green-audio-player.js"></script>
 
 </head>
 <body>
     <div id="settingsToggleRow">
         <div id="bookmark" class="bookmark-icon"  onClick="toggleBookmark()"></div>
         <button id="infoToggle" onclick="toggleInfo()">☰</button>
-        <a id="title" target="_blank"></a>
+        <a id="title"></a>
         <button id="settingsToggle" onclick="toggleSettings()">⛭</button>
     </div>
     <div id="audio_player" class="hidden">
@@ -93,9 +91,5 @@
     <textarea id="text_container" hidden></textarea>
     <script src="js/texts.js"></script>
     <script src="js/reader.js"></script>
-    <script>
-        new GreenAudioPlayer('.gap-example');
-        const audio_object = document.querySelector('.gap-example  audio');
-    </script>
 </body>
 </html>
