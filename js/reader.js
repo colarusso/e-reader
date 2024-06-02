@@ -413,6 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.toggleBookmark = function() {
+        stop_talk();
         bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || {};
         this_sections_bookmarks = bookmarks[title] || {}
         //console.log(bookmarks)
