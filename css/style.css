@@ -70,6 +70,7 @@ a  {
 }
 #title {
     font-size: 13px;
+    line-height: 17px;
     height: 17px;
     text-align: center;
     flex: 1;
