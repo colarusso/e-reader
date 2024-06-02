@@ -413,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
             document.getElementById("bookmark").classList.remove("bookmarked");
         } else {
-            this_sections_bookmarks[currentPage/localStorage.getItem("currentLength")] = pages[currentPage].join(" ").replace(/<[^>]*>/g,"").replace(/\s+/g," ").replace("&#8209;","-").slice(0, 50); 
+            this_sections_bookmarks[currentPage/localStorage.getItem("currentLength")] = pages[currentPage].join(" ").replace(/<[^>]*>/g,"").replace(/\s+/g," ").replaceAll("&#8209;","-").slice(0, 50); 
             bookmarks[title] = this_sections_bookmarks
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
             document.getElementById("bookmark").classList.add("bookmarked");
