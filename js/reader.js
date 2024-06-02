@@ -560,5 +560,14 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem("bookmarks");
         }
     }
+
+    window.restoreDefaults = function() {
+        let text;
+        if (confirm("Press OK to reset and restore defaults. This includes deleting all bookmarks.") == true) {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = "."
+        }
+    }    
     
 });

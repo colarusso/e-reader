@@ -298,7 +298,9 @@
         <div>Reading Speed: <i id="wpm_n">200</i> words/minute</div>
         <input type="range" min="0" max="800" value="200" class="slider" id="wpm" onInput="document.getElementById('wpm_n').innerHTML = this.value;localStorage.setItem('wpm', this.value);updateProgress();">
         <hr style="margin-top: 20px;margin-bottom: 20px;">
-        <button onclick="deleteBookmarks()" class="danger_button">Delete Bookmarks</button>
+        <button onclick="deleteBookmarks()" class="danger_button" style="margin-bottom: 8px;">Delete Bookmarks</button>
+        <button onclick="restoreDefaults()" class="danger_button">Reset / Restore Defaults</button>
+        
     </div>
     <div id="content" onclick="handleContentClick(event)"></div>
     <footer>
