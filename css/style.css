@@ -51,7 +51,7 @@ a  {
     font-size: 16px;
     padding: 0px;
     color: black;
-    margin-right: 50px; /* Right align the hamburger */
+    margin-right: 60px; /* Right align the hamburger */
 }
 .dark-mode #infoToggle {
     color: white;
