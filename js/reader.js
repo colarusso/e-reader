@@ -610,7 +610,7 @@ var sayit = function (sentences,i)
     msg.volume = 1; // 0 to 1
     msg.rate = localStorage.getItem('wpm')/175; //$('#rate').val(); // 0.1 to 10
     msg.pitch = 1; //0 to 2
-    msg.lang = 'en-US' //$('#lang').val();
+    //msg.lang = 'en-US' //$('#lang').val();
     msg.onstart = function (event) {
     };
     msg.onend = function(event) {
