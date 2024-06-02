@@ -94,6 +94,8 @@
             padding: 5px 20px 18px 20px;
             background-color: #fff;
             width: 100%;
+            max-height: 75dvh;
+            overflow-y: auto;
             display: none;
             position: fixed;
             top: 38px; /* Offset by the height of the menu bar */
@@ -192,6 +194,14 @@
             padding: 3px;
             background: rgb(65, 65, 65);
         }
+        .danger_button {
+            color:black;
+            background: rgb(244, 124, 124);
+        }
+        .dark-mode .danger_button {
+            color:rgb(226, 226, 226);
+            background: #902222;
+        }
         input {
             opacity: 1;
             border-radius: 3px;
@@ -253,11 +263,11 @@
         <button onclick="previousPage()">Previous</button>
         <button onclick="nextPage()">Next</button>
         -->
-        Jump to location in current section
+        Jump to location (current section)
         <input type="range" min="0" max="100" value="50" class="slider" id="jumpto" onChange="displayPage(Math.round(this.value/100*localStorage.getItem(`currentLength`)))">
         <hr>
         <select id="jumptobookmaks" style="margin-bottom: 6px;text-align: left;" onChange="window.location.href=this.value">
-            <option value=null>Bookmark</option>
+            <option value=null>Bookmarks</option>
         </select>
         <hr>
         <!--
@@ -285,8 +295,11 @@
             <option value="right">Right</option>
         </select>
         <label for="darkMode">Dark Mode: <input type="checkbox" id="darkMode"></label>
-        <hr>
-        <button onclick="deleteBookmarks()">Delete Bookmarks</button>
+        <hr style="margin-bottom: 20px;">
+        <button onclick="deleteBookmarks()" class="danger_button">Delete Bookmarks</button>
+        <hr style="margin-top: 20px;">
+           <div>Reading Speed: <i id="wpm_n">200</i> words/minute</div>
+        <input type="range" min="0" max="800" value="200" class="slider" id="wpm" onChange="document.getElementById('wpm_n').innerHTML = this.value;localStorage.setItem('wpm', this.value);updateProgress();">
     </div>
     <div id="content" onclick="handleContentClick(event)"></div>
     <footer>
@@ -294,6 +307,7 @@
         <span id="timeRemaining">0 mins left</span>
     </footer>
     <textarea id="text_container" hidden></textarea>
+    <script src="js/texts.js"></script>
     <script src="js/reader.js"></script>
 </body>
 </html>

@@ -1,8 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const collection_name = "Selected Works of Edgar Allan Poe"
-    const text_arr = ["texts/Cover.txt","Contents","texts/The Purloined Letter.txt","texts/The Gold-Bug.txt","texts/About.txt"]
-
     window.onresize = function(){ location.reload(); }
     
     const content = document.getElementById('content');
@@ -18,7 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoToggle = document.getElementById('infoToggle');
     const titleElement = document.getElementById('title');
    
-    const wordsPerMinute = 200; // Average reading speed
+    const wordsPerMinute = localStorage.getItem('wpm') || document.getElementById('wpm').value; // Average reading speed
+    document.getElementById('wpm').value = wordsPerMinute;
+    document.getElementById('wpm_n').innerHTML = wordsPerMinute;
+    localStorage.setItem('wpm',wordsPerMinute)
     let pages = [];
     let currentTitle = '';
 
@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function updateProgress() {
+    window.updateProgress = function() {
         const progress = ((currentPage / (pages.length - 1)) * 100);
         if (progress>100){
             progress = 100;
@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             progressPercentage.innerText = `${Math.round(progress)}%`;
             const remainingWords = pages.slice(currentPage).join(' ').split(/\s+/).length;
-            const remainingMinutes = Math.ceil(remainingWords / wordsPerMinute);
+            const remainingMinutes = Math.ceil(remainingWords / localStorage.getItem('wpm'));
             if (remainingMinutes<=60) {
                 timeRemaining.innerText = `${remainingMinutes} mins left`;    
             } else {
@@ -514,11 +514,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         else if (e.keyCode == '37') {
         // left arrow
-        previousPage();
+            if (controls.style.display != "flex"){
+                previousPage();
+            }
         }
         else if (e.keyCode == '39') {
         // right arrow
-        nextPage();
+            if (controls.style.display != "flex"){
+                nextPage();
+            }
         }
 
     }
