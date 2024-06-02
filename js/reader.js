@@ -516,9 +516,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         e = e || window.event;
 
-        if (e.keyCode == '66') {
-            // b
+        if (e.keyCode == '32') {
+            // spacebar
             toggleBookmark();
+        }
+        else if (e.keyCode == '80') {
+            // p
+            toggleProgress();
         }
         else if (e.keyCode == '49') {
             // 1
