@@ -509,6 +509,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+progress/100;
             }    
         }
+        history_list = JSON.parse(sessionStorage.getItem("history_list")) || [];
+        history_list.push(newurl)
+        sessionStorage.setItem("history_list",JSON.stringify(history_list))
+        //console.log(history_list)
         window.history.pushState({path:newurl},'',newurl);    
     }
 
@@ -572,4 +576,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }    
     
+    window.addEventListener("popstate", function (e) {
+        history_list = JSON.parse(sessionStorage.getItem("history_list"));
+        history_list = history_list.slice(0,history_list.length-2)
+        sessionStorage.setItem("history_list",JSON.stringify(history_list))
+        //console.log(history_list)
+        if (history_list.slice(-1)[0]){
+            window.location.href = history_list.slice(-1)[0];
+        }
+    });
+
 });
