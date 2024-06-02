@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let pages = [];
     let currentTitle = '';
 
+    window.pageProg = localStorage.getItem('pageProg') || 0;
+
     // Get title from URL
     const urlParams = new URLSearchParams(window.location.search);
     const title = urlParams.get('file') || localStorage.getItem('lastSelection') || "Contents";
@@ -420,6 +422,16 @@ document.addEventListener('DOMContentLoaded', () => {
         displayPage(currentPage);
     }
 
+    window.toggleProgress = function() {
+        if (window.pageProg==0) {
+            window.pageProg = 1;
+        } else {
+            window.pageProg = 0;
+        }
+        localStorage.setItem('pageProg',window.pageProg);
+        updateProgress();
+    }
+
     window.toggleSettings = function() {
         if (controls.style.display === "none" || controls.style.display === "") {
             controls.style.display = "flex";
@@ -461,10 +473,19 @@ document.addEventListener('DOMContentLoaded', () => {
             progress = 100;
             displayPage(pages.length - 1);
         } else if (isNaN(progress)) {
-            progressPercentage.innerText = `100%`;
+            if (window.pageProg==0) {
+                progressPercentage.innerText = `100%`;
+            } else {
+                progressPercentage.innerText = `1 of ${pages.length}`;
+            }
             timeRemaining.innerText = `0`;    
         } else {
-            progressPercentage.innerText = `${Math.round(progress)}%`;
+            if (window.pageProg==0) {
+                progressPercentage.innerText = `${Math.round(progress)}%`;
+            } else {
+                progressPercentage.innerText = `${currentPage+1} of ${pages.length}`;
+            }
+
             const remainingWords = pages.slice(currentPage).join(' ').split(/\s+/).length;
             const remainingMinutes = Math.ceil(remainingWords / localStorage.getItem('wpm'));
             if (remainingMinutes<=60) {

@@ -295,16 +295,15 @@
             <option value="right">Right</option>
         </select>
         <label for="darkMode">Dark Mode: <input type="checkbox" id="darkMode"></label>
-        <hr style="margin-bottom: 20px;">
-        <button onclick="deleteBookmarks()" class="danger_button">Delete Bookmarks</button>
-        <hr style="margin-top: 20px;">
-           <div>Reading Speed: <i id="wpm_n">200</i> words/minute</div>
+        <div>Reading Speed: <i id="wpm_n">200</i> words/minute</div>
         <input type="range" min="0" max="800" value="200" class="slider" id="wpm" onChange="document.getElementById('wpm_n').innerHTML = this.value;localStorage.setItem('wpm', this.value);updateProgress();">
+        <hr style="margin-top: 20px;margin-bottom: 20px;">
+        <button onclick="deleteBookmarks()" class="danger_button">Delete Bookmarks</button>
     </div>
     <div id="content" onclick="handleContentClick(event)"></div>
     <footer>
-        <span id="progressPercentage">0%</span>
-        <span id="timeRemaining">0 mins left</span>
+        <span id="progressPercentage" onClick="toggleProgress()"></span>
+        <span id="timeRemaining"></span>
     </footer>
     <textarea id="text_container" hidden></textarea>
     <script src="js/texts.js"></script>
