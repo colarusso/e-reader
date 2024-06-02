@@ -9,6 +9,9 @@ body {
     flex-direction: column;
     height: 100vh;
 }
+#audio_player {
+    margin-top: 40px;
+}
 .dark-mode {
     background-color: black;
     color: rgb(215, 215, 215);

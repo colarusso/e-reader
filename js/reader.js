@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     titleElement.innerText = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
     document.title = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"") + " | " + collection_name
     //if (title!="Contents") {
+    // "🎧 "
     //    titleElement.href = textFile;    
     //}
 

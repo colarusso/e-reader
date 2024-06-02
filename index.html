@@ -10,6 +10,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/green-audio-player.css">
+    <script src="js/green-audio-player.js"></script>
 
 </head>
 <body>
@@ -18,6 +20,26 @@
         <button id="infoToggle" onclick="toggleInfo()">☰</button>
         <a id="title" target="_blank"></a>
         <button id="settingsToggle" onclick="toggleSettings()">⛭</button>
+    </div>
+    <div id="audio_player" class="hidden">
+        <div class="audio_container_container" style="display:block;">
+            <div class="audio_container">
+              <div class="gap-example player-accessible">
+                <audio>
+                    <source src="https://icymilaw.org/podcast/2023-06-01_show.mp3" type="audio/mpeg">
+                </audio>
+              </div>
+              <span class="playback">
+                <a href="javascript:void('')" onClick="set_speed(0.5)" class="playback" id="pb05">0.5x</a> &bull;
+                       <a href="javascript:void('')" onClick="set_speed(1)" class="playback" id="pb10" style="font-weight:900;">1x</a> &bull;
+                       <a href="javascript:void('')" onClick="set_speed(1.5)" class="playback" id="pb15">1.5x</a> &bull;
+                       <a href="javascript:void('')" onClick="set_speed(2)" class="playback" id="pb20">2x</a> &bull;
+                       <a href="javascript:void('')" onClick="set_speed(3)" class="playback" id="pb30">3x</a>
+
+                       &nbsp;&nbsp; ~ Sync: Text &bull; Audio
+              </span>        
+            </div>
+          </div>
     </div>
     <div id="information" class="hidden">
         <!--
@@ -71,5 +93,9 @@
     <textarea id="text_container" hidden></textarea>
     <script src="js/texts.js"></script>
     <script src="js/reader.js"></script>
+    <script>
+        new GreenAudioPlayer('.gap-example');
+        const audio_object = document.querySelector('.gap-example  audio');
+    </script>
 </body>
 </html>
