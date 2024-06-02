@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.title = "Contents" + " | " + collection_name
             //titleElement.style.display = "none";
         }
-        text = `<i>Tap to "turn" pages. Bookmark <a%20href=".">this </a><a%20href=".">page</a> to have this browser remember your place. Mobile users: add to your homescreen for best UX.</i>
+        text = `<i>Tap to "turn" pages. Bookmarking <a%20href=".">this </a><a%20href=".">page</a> remembers your place. Tapping 🎧 turns on text to speech. Mobile users: add to your homescreen for best UX.</i>
         
         <center><b>~ Contents ~</b></center>`;
 
