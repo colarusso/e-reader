@@ -32,8 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const textFile = title//`${title}.txt`;
     
-    let currentPage = 1
-
     // Display the title as a link
     //titleElement.innerText = title.charAt(0).toUpperCase() + title.slice(1);
     titleElement.innerText = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
@@ -51,7 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
     //    currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 0;
     //}
     //let currentPage = 0;
-
+    let currentPage = parseInt(localStorage.getItem(`${title}-currentPage`), 10) || 0;
+    let currentLength = parseInt(localStorage.getItem(`${title}-currentLength`), 10) || 1;
+    localStorage.setItem('currentLength', currentLength);
+    
+    let currentProg = (urlParams.get('prog')) || currentPage/currentLength;
+    if (currentProg>1){
+        currentProg = 0.999999999999;
+    }
+    currentPage = Math.floor(currentLength*currentProg);
     //console.log(currentProg,currentLength,currentPage,Math.floor(currentLength*currentProg))
 
     // Load settings from local storage
@@ -72,15 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(text => {
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Dynamically paginate text
-        let currentPage = parseInt(localStorage.getItem(`${title}-currentPage`), 10) || 0;
-        let currentLength = parseInt(localStorage.getItem(`${title}-currentLength`), 10); // || 1;
-        localStorage.setItem('currentLength', currentLength);
-        
-        let currentProg = (urlParams.get('prog')) || currentPage/currentLength;
-        if (currentProg>1){
-            currentProg = 0.999999999999;
-        }
-        currentPage = Math.floor(currentLength*currentProg);
+        currentPage = Math.floor(localStorage.getItem('currentLength', currentLength)*currentProg);
         displayPage(currentPage);
         //updateProgress();
     })
@@ -107,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Paginate the error message
+        currentPage = Math.floor(localStorage.getItem('currentLength', currentLength)*currentProg);
         displayPage(currentPage);
         //updateProgress();
         var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
