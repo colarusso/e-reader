@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //fontSize=fontSize.value
         //lineHeight=lineHeight.value
         screenWidth= Math.floor(window.innerWidth-40)
-        screenHeight=  Math.floor(window.innerHeight-110)
+        screenHeight=  Math.floor(window.innerHeight-115)
         // Create a canvas element to measure text
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
