@@ -447,6 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("jumpto").value = ((currentPage / (pages.length - 1)) * 100);
         if (information.style.display === "none" || information.style.display === "") {
             information.style.display = "flex";
+            document.getElementById("jumpto").focus();
         } else {
             information.style.display = "none";
         }
@@ -466,6 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stop_talk();
         if (controls.style.display === "none" || controls.style.display === "") {
             controls.style.display = "flex";
+            document.getElementById("fontType").focus();
         } else {
             controls.style.display = "none";
             applySettings();
@@ -569,13 +571,11 @@ document.addEventListener('DOMContentLoaded', () => {
             controls.style.display = "none";
             applySettings();
             toggleInfo();
-            document.getElementById("jumpto").focus();
         }
         else if (e.keyCode == '50') {
             // 2
             information.style.display = "none";
             toggleSettings();
-            document.getElementById("fontType").focus();
         }
         else if (e.keyCode == '37') {
         // left arrow
