@@ -304,6 +304,8 @@ hr {
 
 
 #chapter_book {
+    width: 150px;
+    text-align: center;
     cursor: pointer;
     padding-bottom: 25px;
 }
@@ -332,4 +334,3 @@ footer {
     background-color: black;
     color: #9a9a9a;
 }
-

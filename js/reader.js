@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    screen.orientation.lock("natural")
+
     window.onresize = function(){ location.reload(); }
     
     const content = document.getElementById('content');
@@ -462,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    window.toggleInfo = function() {
+    window.toggleInfo = function(focus=0) {
         stop_talk();
         document.getElementById("jumpto").value = ((currentPage / (pages.length - 1)) * 100);
         if (information.style.display === "none" || information.style.display === "") {
@@ -471,7 +473,9 @@ document.addEventListener('DOMContentLoaded', () => {
             information.style.display = "none";
         }
         document.getElementById("infoToggle").blur();
-        document.getElementById('jumpto').focus();
+        if (focus==1) {
+            document.getElementById('jumpto').focus();
+        }
     }
 
     window.toggleShortcuts = function() {
@@ -484,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    window.toggleSettings = function() {
+    window.toggleSettings = function(focus=0) {
         stop_talk();
         if (controls.style.display === "none" || controls.style.display === "") {
             controls.style.display = "flex";
@@ -494,7 +498,9 @@ document.addEventListener('DOMContentLoaded', () => {
             applySettings();
         }
         document.getElementById("infoToggle").blur();
-        document.getElementById('fontType').focus();
+        if (focus==1) {
+            document.getElementById('fontType').focus();
+        }
     }
 
 
