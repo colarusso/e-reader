@@ -296,8 +296,25 @@ hr {
 }
 
 
+#progressPercentage {
+    cursor: pointer;
+    padding-bottom: 25px;
+}
+
+
+#chapter_book {
+    cursor: pointer;
+    padding-bottom: 25px;
+}
+
+
+#timeRemaining {
+    padding-bottom: 25px;
+}
+
+
 footer {
-    padding: 10px 20px 25px 15px;
+    padding: 10px 20px 0px 15px;
     background-color: #fff;
     color: #a6a6a6;
     display: flex;

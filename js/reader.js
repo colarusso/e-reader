@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.pageProg = localStorage.getItem('pageProg') || 0;
 
+    window.ChapterBook = localStorage.getItem('ChapterBook') || "selection";
+
     // Get title from URL
     const urlParams = new URLSearchParams(window.location.search);
     const title = urlParams.get('file') || localStorage.getItem('lastSelection') || "Contents";
@@ -150,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //    applyDarkMode();
         //}
         applySettings();
+        applyChapterBook();
     }
 
     function applySettings() {
@@ -158,6 +161,19 @@ document.addEventListener('DOMContentLoaded', () => {
         content.style.lineHeight = lineHeight.value;
         content.style.textAlign = textAlign.value;
         paginateAndDisplay();
+    }
+
+
+    function applyChapterBook() {
+        if (window.ChapterBook=="selection") {
+            document.getElementById("chapter_book").innerHTML = "in selection"
+        } else if (window.ChapterBook=="total") {
+            document.getElementById("chapter_book").innerHTML = "in total"
+        } else {
+            document.getElementById("chapter_book").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            document.getElementById("progressPercentage").innerHTML = "&nbsp;"
+            document.getElementById("timeRemaining").innerHTML = "&nbsp;"
+        }
     }
 
     function toggleDarkMode() {
@@ -439,11 +455,11 @@ document.addEventListener('DOMContentLoaded', () => {
             window.pageProg = 0;
         }
         localStorage.setItem('pageProg',window.pageProg);
-        updateProgress();
+        updateProgress();    
     }
 
     window.toggleChapterBook = function () {
-        
+
     }
 
     window.toggleInfo = function() {
@@ -451,10 +467,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("jumpto").value = ((currentPage / (pages.length - 1)) * 100);
         if (information.style.display === "none" || information.style.display === "") {
             information.style.display = "flex";
-            document.getElementById("infoToggle").blur();
         } else {
             information.style.display = "none";
         }
+        document.getElementById("infoToggle").blur();
+        document.getElementById('jumpto').focus();
     }
 
     window.toggleShortcuts = function() {
@@ -471,11 +488,32 @@ document.addEventListener('DOMContentLoaded', () => {
         stop_talk();
         if (controls.style.display === "none" || controls.style.display === "") {
             controls.style.display = "flex";
-            document.getElementById("settingsToggle").blur();
+            document.getElementById("infoToggle").blur();
         } else {
             controls.style.display = "none";
             applySettings();
         }
+        document.getElementById("infoToggle").blur();
+        document.getElementById('fontType').focus();
+    }
+
+
+    window.toggleChapterBook = function() {
+        if (window.ChapterBook=="selection") {
+            window.ChapterBook = "total"
+            document.getElementById("chapter_book").innerHTML = "in total"
+            updateProgress();
+        } else if (window.ChapterBook=="total") {
+            window.ChapterBook = "none"
+            document.getElementById("chapter_book").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            document.getElementById("progressPercentage").innerHTML = "&nbsp;"
+            document.getElementById("timeRemaining").innerHTML = "&nbsp;"
+        } else if (window.ChapterBook=="none") {
+            window.ChapterBook = "selection"
+            document.getElementById("chapter_book").innerHTML = "in selection"
+            updateProgress();
+        }
+        localStorage.setItem('ChapterBook',window.ChapterBook)
     }
 
     document.addEventListener('click', function(event) {
@@ -497,33 +535,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.updateProgress = function() {
         const progress = ((currentPage / (pages.length - 1)) * 100);
-        if (progress>100){
-            progress = 100;
-            displayPage(pages.length - 1);
-        } else if (isNaN(progress)) {
-            if (window.pageProg==0) {
-                progressPercentage.innerText = `100%`;
-            } else {
-                progressPercentage.innerText = `1 of ${pages.length}`;
-            }
-            timeRemaining.innerText = `0`;    
-        } else {
-            if (window.pageProg==0) {
-                progressPercentage.innerText = `${Math.round(progress)}%`;
-            } else {
-                progressPercentage.innerText = `${currentPage+1} of ${pages.length}`;
-            }
+        //if (progress>100){
+        //    progress = 100;
+        //    displayPage(pages.length - 1);
+        //} else 
+        if (window.ChapterBook!="none") {
+            if (isNaN(progress)) {
 
-            const remainingWords = pages.slice(currentPage).join(' ').split(/\s+/).length;
-            const remainingMinutes = Math.ceil(remainingWords / localStorage.getItem('wpm'));
-            if (remainingMinutes<=60) {
-                timeRemaining.innerText = `${remainingMinutes} mins left`;    
+                if (window.pageProg==0) {
+                    progressPercentage.innerText = `100%`;
+                } else {
+                    progressPercentage.innerText = `1 of ${pages.length}`;
+                }
+                timeRemaining.innerText = `0`;    
             } else {
-                remainingHours = Math.floor(remainingMinutes/60)
-                minutesLeft = remainingMinutes % 60;
-                timeRemaining.innerText = `${remainingHours}h ${minutesLeft}m left`;    
+                if (window.pageProg==0) {
+                    progressPercentage.innerText = `${Math.round(progress)}%`;
+                } else {
+                    progressPercentage.innerText = `${currentPage+1} of ${pages.length}`;
+                }
+
+                const remainingWords = pages.slice(currentPage).join(' ').split(/\s+/).length;
+                const remainingMinutes = Math.ceil(remainingWords / localStorage.getItem('wpm'));
+                if (remainingMinutes<=60) {
+                    timeRemaining.innerText = `${remainingMinutes} mins left`;    
+                } else {
+                    remainingHours = Math.floor(remainingMinutes/60)
+                    minutesLeft = remainingMinutes % 60;
+                    timeRemaining.innerText = `${remainingHours}h ${minutesLeft}m left`;    
+                }
             }
         }
+        
         if (title=="Contents") {
             var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
         } else {
@@ -574,12 +617,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // 1
             controls.style.display = "none";
             applySettings();
-            toggleInfo();
+            toggleInfo(1);
         }
         else if (e.keyCode == '50') {
             // 2
             information.style.display = "none";
-            toggleSettings();
+            toggleSettings(1);
         }
         else if (e.keyCode == '37') {
         // left arrow
