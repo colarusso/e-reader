@@ -347,6 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.nextPage = function() {
+        stop_talk();
         //toggleInfo();
         if (currentPage < pages.length - 1) {
             displayPage(currentPage + 1);
@@ -369,6 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.previousPage = function() {
+        stop_talk();
         //toggleInfo();
         if (currentPage > 0) {
             displayPage(currentPage - 1);
