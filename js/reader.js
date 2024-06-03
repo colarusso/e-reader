@@ -442,6 +442,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateProgress();
     }
 
+    window.toggleChapterBook = function () {
+        
+    }
+
     window.toggleInfo = function() {
         stop_talk();
         document.getElementById("jumpto").value = ((currentPage / (pages.length - 1)) * 100);

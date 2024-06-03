@@ -224,7 +224,7 @@ hr {
     flex-direction: column;
     box-sizing: border-box;
     line-height: 33px;
-    border-bottom: 1px solid #787878;
+    border-bottom: 3px solid #787878;
 }
 .dark-mode #information {
     background-color: black;
@@ -280,7 +280,7 @@ hr {
     flex-direction: column;
     box-sizing: border-box;
     line-height: 33px;
-    border-bottom: 1px solid #787878;
+    border-bottom: 3px solid #787878;
 }
 .dark-mode #controls {
     background-color: black;
