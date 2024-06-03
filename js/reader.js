@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.title = "Contents" + " | " + collection_name
             //titleElement.style.display = "none";
         }
-        text = `<i>Arrow keys or tap left-right to "turn" pages. Bookmarking <a%20href=".">this </a><a%20href=".">page</a> remembers your place. Mobile users: add homescreen for best UX. Tapping 🎧 toggels text to speech on/off.</i>
+        text = `<i>Arrow keys or tap left-right to "turn" pages. Bookmarking <a%20href=".">this </a><a%20href=".">page</a> remembers your place. Mobile users: add to homescreen for best UX. Tapping 🎧 toggels read aloud on/off.</i>
         
         <center><b>~ Contents ~</b></center>`;
 
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //document.getElementById("information").innerHTML = "";
     for (const element of text_arr) { // You can use `let` instead of `const` if you like
-        document.getElementById("information").innerHTML += `<button onclick="localStorage.setItem('${element}-currentPage', 0);window.location.href = '?file=${element}'" style="margin-bottom: 6px;">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"")}</button>`
+        document.getElementById("contents").innerHTML += `<button onclick="localStorage.setItem('${element}-currentPage', 0);window.location.href = '?file=${element}'" style="margin-bottom: 6px;">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"")}</button>`
     }
 
     function saveSettings() {
@@ -347,7 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.nextPage = function() {
-        stop_talk();
         //toggleInfo();
         if (currentPage < pages.length - 1) {
             displayPage(currentPage + 1);
@@ -370,7 +369,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.previousPage = function() {
-        stop_talk();
         //toggleInfo();
         if (currentPage > 0) {
             displayPage(currentPage - 1);
@@ -444,16 +442,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateProgress();
     }
 
-    window.toggleSettings = function() {
-        stop_talk();
-        if (controls.style.display === "none" || controls.style.display === "") {
-            controls.style.display = "flex";
-        } else {
-            controls.style.display = "none";
-            applySettings();
-        }
-    }
-
     window.toggleInfo = function() {
         stop_talk();
         document.getElementById("jumpto").value = ((currentPage / (pages.length - 1)) * 100);
@@ -461,6 +449,26 @@ document.addEventListener('DOMContentLoaded', () => {
             information.style.display = "flex";
         } else {
             information.style.display = "none";
+        }
+    }
+
+    window.toggleShortcuts = function() {
+        if (shortcuts.style.display === "none" || shortcuts.style.display === "") {
+            shortcuts.style.display = "block";
+            document.getElementById("shortcuts_expand_text").innerHTML = "- Hide shortcut glossary";
+        } else {
+            shortcuts.style.display = "none";
+            document.getElementById("shortcuts_expand_text").innerHTML = "+ Show shortcut glossary";
+        }
+    }
+
+    window.toggleSettings = function() {
+        stop_talk();
+        if (controls.style.display === "none" || controls.style.display === "") {
+            controls.style.display = "flex";
+        } else {
+            controls.style.display = "none";
+            applySettings();
         }
     }
 
@@ -544,6 +552,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (e.keyCode == '32') {
             // spacebar
+            controls.style.display = "none";
+            information.style.display = "none";
             audio_play();
         }
         else if (e.keyCode == '66') {
@@ -569,13 +579,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         else if (e.keyCode == '37') {
         // left arrow
-            if (controls.style.display != "flex"){
+            stop_talk();
+            if ((controls.style.display != "flex") && (information.style.display != "flex")){
                 previousPage();
             }
         }
         else if (e.keyCode == '39') {
         // right arrow
-            if (controls.style.display != "flex"){
+            stop_talk();
+            if ((controls.style.display != "flex") && (information.style.display != "flex")){
                 nextPage();
             }
         }
@@ -623,19 +635,19 @@ var sayit = function (sentences,i)
         if (speaking == 1) {
             nextPage();
         }
-	    //console.log('Finished in ' + event.elapsedTime + ' seconds.');
+	    console.log('Finished in ' + event.elapsedTime + ' seconds.');
     };
     msg.onerror = function(event)
     {
-        //console.log('Errored ' + event);
+        console.log('Errored ' + event);
     }
     msg.onpause = function (event)
     {
-        //console.log('paused ' + event);
+        console.log('paused ' + event);
     }
     msg.onboundary = function (event)
     {
-        //console.log('onboundary ' + event);
+        console.log('onboundary ' + event);
     }
     return msg;
 }
@@ -645,8 +657,7 @@ var talk = function () {
 
 	speechSynthesis.cancel(); // if it errors, this clears out the error.
     
-	var sentences = "";
-    var sentences = content.innerText.split(/[^\w\s'",]+-/);
+    var sentences = content.innerHTML.replace(/<.*ALT=('|")([^'']*)('|")/ig,"The following is the Alt text of an image: $2 . End of description.<").replace(/<[^>]*>/g,"").split(/[^\w\s'",]+-/);
     
     for (var i=0;i< sentences.length;i++)
     {

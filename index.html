@@ -29,12 +29,29 @@
         <select id="jumptobookmaks" style="margin-bottom: 6px;text-align: left;" onChange="window.location.href=this.value">
             <option value=null>Bookmarks</option>
         </select>
-        <hr>
+        <hr style="margin-bottom: 5px;">
+        <span id="shortcuts_expand"> <button id="shortcuts_expand_text" onclick="toggleShortcuts()" style="shortcut_button">+ Show shortcut glossary</button>
+        <div id="shortcuts" style="display:none;">
+            Pressing:<br>
+            <i class="shortcut">1</i> opens this window (☰);
+            <i class="shortcut">2</i> opens the settings window (⛭);
+            <i class="shortcut">b</i> toggles bookmak;
+            <i class="shortcut">space&nbsp;bar</i> toggles read aloud (🎧);
+            <i class="shortcut">left&nbsp;arrow</i> turns back one page;
+            <i class="shortcut">right&nbsp;arrow</i> turns forward one page; and 
+            <i class="shortcut">p</i> toggles progress between perecentage and screen count.
+            </ul>
+        </div>
+
+       <hr>
+        <div id="contents"></div>
         <!--
         <hr>
         <button onclick="goToBeginning()" style="margin-bottom: 6px;">first page in current</button>
         <button onclick="goToLast()">last page in current</button>
         -->
+        <hr style="margin-bottom: 5px;">
+        <div class="github">Like this e-reader? Visit the <a tabindex="0" href="https://github.com/colarusso/e-reader" target="_blank">GitHub repo</a>.</div>
     </div>
     <div id="controls" class="hidden">
         <label for="fontType">Font: </label>
