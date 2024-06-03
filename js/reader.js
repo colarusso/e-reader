@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("jumpto").value = ((currentPage / (pages.length - 1)) * 100);
         if (information.style.display === "none" || information.style.display === "") {
             information.style.display = "flex";
-            document.getElementById("jumpto").focus();
+            document.getElementById("infoToggle").blur();
         } else {
             information.style.display = "none";
         }
@@ -467,7 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stop_talk();
         if (controls.style.display === "none" || controls.style.display === "") {
             controls.style.display = "flex";
-            document.getElementById("fontType").focus();
+            document.getElementById("settingsToggle").blur();
         } else {
             controls.style.display = "none";
             applySettings();
