@@ -166,9 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function applyChapterBook() {
         if (window.ChapterBook=="selection") {
-            document.getElementById("chapter_book").innerHTML = "in selection"
+            document.getElementById("chapter_book").innerHTML = "for selection"
         } else if (window.ChapterBook=="total") {
-            document.getElementById("chapter_book").innerHTML = "in total"
+            document.getElementById("chapter_book").innerHTML = "for all"
         } else {
             document.getElementById("chapter_book").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
             document.getElementById("progressPercentage").innerHTML = "&nbsp;"
@@ -501,7 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.toggleChapterBook = function() {
         if (window.ChapterBook=="selection") {
             window.ChapterBook = "total"
-            document.getElementById("chapter_book").innerHTML = "in total"
+            document.getElementById("chapter_book").innerHTML = "for all"
             updateProgress();
         } else if (window.ChapterBook=="total") {
             window.ChapterBook = "none"
@@ -510,7 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("timeRemaining").innerHTML = "&nbsp;"
         } else if (window.ChapterBook=="none") {
             window.ChapterBook = "selection"
-            document.getElementById("chapter_book").innerHTML = "in selection"
+            document.getElementById("chapter_book").innerHTML = "for selection"
             updateProgress();
         }
         localStorage.setItem('ChapterBook',window.ChapterBook)
@@ -612,6 +612,10 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (e.keyCode == '80') {
             // p
             toggleProgress();
+        }
+        else if (e.keyCode == '70') {
+            // f
+            toggleChapterBook();
         }
         else if (e.keyCode == '49') {
             // 1
