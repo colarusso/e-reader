@@ -542,6 +542,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (e.keyCode == '32') {
             // spacebar
+            audio_play();
+        }
+        else if (e.keyCode == '66') {
+            // b
             toggleBookmark();
         }
         else if (e.keyCode == '80') {
