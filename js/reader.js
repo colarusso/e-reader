@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    screen.orientation.lock("natural")
-
     window.onresize = function(){ location.reload(); }
     
     const content = document.getElementById('content');
