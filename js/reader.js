@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    //screen.orientation.lock("natural")
-
     window.onresize = function(){ location.reload(); }
     
     const content = document.getElementById('content');
@@ -464,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    window.toggleInfo = function(focus_call=0) {
+    window.toggleInfo = function() {
         stop_talk();
         document.getElementById("jumpto").value = ((currentPage / (pages.length - 1)) * 100);
         if (information.style.display === "none" || information.style.display === "") {
@@ -473,9 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
             information.style.display = "none";
         }
         document.getElementById("infoToggle").blur();
-        if (focus_call==1) {
-            document.getElementById('jumpto').focus();
-        }
+        document.getElementById('jumpto').focus();
     }
 
     window.toggleShortcuts = function() {
@@ -488,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    window.toggleSettings = function(focus_call=0) {
+    window.toggleSettings = function() {
         stop_talk();
         if (controls.style.display === "none" || controls.style.display === "") {
             controls.style.display = "flex";
@@ -498,9 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
             applySettings();
         }
         document.getElementById("infoToggle").blur();
-        if (focus_call==1) {
-            document.getElementById('fontType').focus();
-        }
+        document.getElementById('fontType').focus();
     }
 
 
