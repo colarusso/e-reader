@@ -70,8 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener for dark mode toggle
     darkMode.addEventListener('change', toggleDarkMode);
 
-    var word_count = 0;
-    var text = ""
+    var text = "";
     // Load the book content
     fetch(textFile)
     .then(response => {
@@ -85,8 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
         pages = paginateText(text); // Dynamically paginate text
         currentPage = Math.floor(localStorage.getItem('currentLength', currentLength)*currentProg);
         displayPage(currentPage);
-        word_count =+ text.split(' ').length;
-        console.log("Word count:",word_count);
         //updateProgress();
     })
     .catch((error) => {
@@ -109,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Paginate the error message
         currentPage = Math.floor(localStorage.getItem('currentLength', currentLength)*currentProg);
@@ -119,21 +115,42 @@ document.addEventListener('DOMContentLoaded', () => {
         window.history.pushState({path:newurl},'',newurl);    
     });
 
-    fetch(textFile)
-    .then(response => {
-        if (!response.ok) {  // Check if response is not OK (i.e., not status 200)
-            throw new Error(`HTTP status ${response.status}`); // Throw an error with the status
+    function get_page_count(page) {
+        if (page!="Contents"){
+            fetch(page)
+            .then(response => {
+                if (!response.ok) {  // Check if response is not OK (i.e., not status 200)
+                    throw new Error(`HTTP status ${response.status}`); // Throw an error with the status
+                }
+                return response.text(); // Proceed to extract the text only if status is 200
+            })
+            .then(text => {
+                this_word_count = text.split(' ').length;
+                i++;
+                if (i<text_arr.indexOf(title)) {
+                    word_count_before += this_word_count
+                } else if (i>text_arr.indexOf(title)) {
+                    word_count_after += this_word_count
+                }
+                console.log(title,text_arr.indexOf(title),page,i,this_word_count);
+                updateProgress();
+                if (text_arr.indexOf(page)+1<text_arr.length) {
+                    get_page_count(text_arr[text_arr.indexOf(page)+1]);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        } else if (text_arr.indexOf(page)+1<text_arr.length) {
+            get_page_count(text_arr[text_arr.indexOf(page)+1]);
         }
-        return response.text(); // Proceed to extract the text only if status is 200
-    })
-    .then(text => {
-        word_count =+ text.split(' ').length;
-        console.log("Word count:",word_count);
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+    }
 
+    let word_count_before = 0;
+    let word_count_after = 0;
+    let this_word_count = 0;
+    i = 0;
+    get_page_count(text_arr[0]);
 
     //document.getElementById("information").innerHTML = "";
     for (const element of text_arr) { // You can use `let` instead of `const` if you like
@@ -557,7 +574,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.updateProgress = function() {
-        const progress = ((currentPage / (pages.length - 1)) * 100);
+        
+
+        if (window.ChapterBook=="selection") {
+            page_number = currentPage;
+            total_pages = pages.length;    
+        } else {
+            page_number = word_count_before + currentPage;
+            total_pages = word_count_before + pages.length + word_count_after;    
+        }
+
+        console.log("\nBefore:",word_count_before,"\nAfter:",word_count_after);
+        console.log("\nBefore:",currentPage,"\nAfter:",pages.length-currentPage);
+
+        const progress = ((page_number / (total_pages - 1)) * 100);
         //if (progress>100){
         //    progress = 100;
         //    displayPage(pages.length - 1);
@@ -568,17 +598,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (window.pageProg==0) {
                     progressPercentage.innerText = `100%`;
                 } else {
-                    progressPercentage.innerText = `1 of ${pages.length}`;
+                    progressPercentage.innerText = `1 of ${total_pages}`;
                 }
                 timeRemaining.innerText = `0`;    
             } else {
                 if (window.pageProg==0) {
                     progressPercentage.innerText = `${Math.round(progress)}%`;
                 } else {
-                    progressPercentage.innerText = `${currentPage+1} of ${pages.length}`;
+                    progressPercentage.innerText = `${page_number+1} of ${total_pages}`;
                 }
 
-                const remainingWords = pages.slice(currentPage).join(' ').split(/\s+/).length;
+                const remainingWords = pages.slice(page_number).join(' ').split(/\s+/).length + total_pages-currentPage;
                 const remainingMinutes = Math.ceil(remainingWords / localStorage.getItem('wpm'));
                 if (remainingMinutes<=60) {
                     timeRemaining.innerText = `${remainingMinutes} mins left`;    

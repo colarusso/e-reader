@@ -299,25 +299,25 @@ hr {
 
 #progressPercentage {
     cursor: pointer;
-    padding-bottom: 25px;
+    padding: 10px 0 25px 0;
 }
 
 
 #chapter_book {
-    width: 150px;
+    width: 200px;
     text-align: center;
     cursor: pointer;
-    padding-bottom: 25px;
+    padding: 10px 0 25px 0;
 }
 
 
 #timeRemaining {
-    padding-bottom: 25px;
+    padding: 10px 0 25px 0;
 }
 
 
 footer {
-    padding: 10px 20px 0px 15px;
+    padding: 0px 20px 0px 15px;
     background-color: #fff;
     color: #a6a6a6;
     display: flex;
