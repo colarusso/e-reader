@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    screen.orientation.lock("natural")
-
     window.onresize = function(){ location.reload(); }
     
     const content = document.getElementById('content');
@@ -72,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener for dark mode toggle
     darkMode.addEventListener('change', toggleDarkMode);
 
+    var word_count = 0;
     var text = ""
     // Load the book content
     fetch(textFile)
@@ -86,6 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
         pages = paginateText(text); // Dynamically paginate text
         currentPage = Math.floor(localStorage.getItem('currentLength', currentLength)*currentProg);
         displayPage(currentPage);
+        word_count =+ text.split(' ').length;
+        console.log("Word count:",word_count);
         //updateProgress();
     })
     .catch((error) => {
@@ -117,6 +118,22 @@ document.addEventListener('DOMContentLoaded', () => {
         var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
         window.history.pushState({path:newurl},'',newurl);    
     });
+
+    fetch(textFile)
+    .then(response => {
+        if (!response.ok) {  // Check if response is not OK (i.e., not status 200)
+            throw new Error(`HTTP status ${response.status}`); // Throw an error with the status
+        }
+        return response.text(); // Proceed to extract the text only if status is 200
+    })
+    .then(text => {
+        word_count =+ text.split(' ').length;
+        console.log("Word count:",word_count);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
 
     //document.getElementById("information").innerHTML = "";
     for (const element of text_arr) { // You can use `let` instead of `const` if you like
