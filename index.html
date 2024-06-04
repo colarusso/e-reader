@@ -24,7 +24,7 @@
         <button onclick="nextPage()">Next</button>
         -->
         Jump to location (current selection)
-        <input type="range" min="0" max="100" value="50" class="slider" id="jumpto" onChange="displayPage(Math.round(this.value/100*localStorage.getItem(`currentLength`)))">
+        <input type="range" min="0" max="100" value="50" class="slider" id="jumpto" oninput="displayPage(Math.round(this.value/100*localStorage.getItem(`currentLength`)))">
         <hr>
         <select id="jumptobookmaks" style="margin-bottom: 6px;text-align: left;" onChange="window.location.href=this.value">
             <option value=null>Bookmarks</option>
@@ -84,7 +84,7 @@
     <footer>
         <span id="progressPercentage" onClick="toggleProgress()"></span>
 
-        <span id="chapter_book" onClick="toggleChapterBook()">in selection</span>
+        <span id="chapter_book" onClick="toggleChapterBook()"></span>
 
         <span id="timeRemaining"></span>
     </footer>

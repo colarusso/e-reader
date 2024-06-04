@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('lastSelection', title);
 
     const textFile = title//`${title}.txt`;
+    all_chapters = []
     
     // Display the title as a link
     //titleElement.innerText = title.charAt(0).toUpperCase() + title.slice(1);
@@ -61,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentProg>1){
         currentProg = 0.999999999999;
     }
-    currentPage = Math.floor(currentLength*currentProg);
+    currentPage = Math.round(currentLength*currentProg);
     //console.log(currentProg,currentLength,currentPage,Math.floor(currentLength*currentProg))
 
     // Load settings from local storage
@@ -69,6 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event listener for dark mode toggle
     darkMode.addEventListener('change', toggleDarkMode);
+
+    let word_count_before = 0;
+    let word_count_after = 0;
+    let this_word_count = 0;
 
     var text = "";
     // Load the book content
@@ -125,30 +130,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.text(); // Proceed to extract the text only if status is 200
             })
             .then(text => {
-                this_word_count = text.split(' ').length;
-                i++;
-                if (i<text_arr.indexOf(title)) {
-                    word_count_before += this_word_count
-                } else if (i>text_arr.indexOf(title)) {
-                    word_count_after += this_word_count
-                }
-                console.log(title,text_arr.indexOf(title),page,i,this_word_count);
-                updateProgress();
+                all_chapters[text_arr.indexOf(page)] = paginateText(text);
                 if (text_arr.indexOf(page)+1<text_arr.length) {
                     get_page_count(text_arr[text_arr.indexOf(page)+1]);
+                } else {
+                    updateProgress();
                 }
             })
             .catch((error) => {
                 console.log(error);
             });
-        } else if (text_arr.indexOf(page)+1<text_arr.length) {
-            get_page_count(text_arr[text_arr.indexOf(page)+1]);
-        }
+        } else if (text_arr.indexOf("Contents")+1<text_arr.length) {
+            text = `<i>Arrow keys or tap left-right to "turn" pages. Bookmarking <a%20href=".">this </a><a%20href=".">page</a> remembers your place. Mobile users: add to homescreen for best UX. Tapping 🎧 toggels read aloud on/off.</i>
+            
+            <center><b>~ Contents ~</b></center>`;
+    
+            for (const element of text_arr) { // You can use `let` instead of `const` if you like
+                if (element!="Contents" && element!="texts/Cover.txt") {
+                    element_parts = element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"").split(" ");
+                    text += `\n`;
+                    for (const part of element_parts) {
+                        text += `<a%20href="?file=${element.replace(/\s/i,"%20")}"%20onClick="localStorage.setItem('${element.replace(/\s/g,"%20")}-currentPage',%200);">${part} </a>`;
+                    }
+                }
+            }
+            all_chapters[text_arr.indexOf(page)] = paginateText(text);
+            if (text_arr.indexOf(page)+1<text_arr.length) {
+                get_page_count(text_arr[text_arr.indexOf(page)+1]);
+            } else {
+                updateProgress();
+            } 
+        } 
     }
 
-    let word_count_before = 0;
-    let word_count_after = 0;
-    let this_word_count = 0;
     i = 0;
     get_page_count(text_arr[0]);
 
@@ -206,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (window.ChapterBook=="total") {
             document.getElementById("chapter_book").innerHTML = "for all"
         } else {
-            document.getElementById("chapter_book").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            document.getElementById("chapter_book").innerHTML = "&nbsp;"
             document.getElementById("progressPercentage").innerHTML = "&nbsp;"
             document.getElementById("timeRemaining").innerHTML = "&nbsp;"
         }
@@ -337,8 +351,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pages.push(currentPage);
         }
     
-        localStorage.setItem(`${title}-currentLength`, pages.length);
-        localStorage.setItem('currentLength', pages.length);
+        //localStorage.setItem(`${title}-currentLength`, pages.length);
+        //localStorage.setItem('currentLength', pages.length);
         return pages;
     }
     
@@ -475,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
             document.getElementById("bookmark").classList.remove("bookmarked");
         } else {
-            this_sections_bookmarks[currentPage/localStorage.getItem("currentLength")] = pages[currentPage].join(" ").replace(/<[^>]*>/g,"").replace(/\s+/g," ").replaceAll("&#8209;","-").slice(0, 50); 
+            this_sections_bookmarks[(currentPage / (pages.length - 1))] = pages[currentPage].join(" ").replace(/<[^>]*>/g,"").replace(/\s+/g," ").replaceAll("&#8209;","-").slice(0, 50); 
             bookmarks[title] = this_sections_bookmarks
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
             document.getElementById("bookmark").classList.add("bookmarked");
@@ -545,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateProgress();
         } else if (window.ChapterBook=="total") {
             window.ChapterBook = "none"
-            document.getElementById("chapter_book").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            document.getElementById("chapter_book").innerHTML = "&nbsp;"
             document.getElementById("progressPercentage").innerHTML = "&nbsp;"
             document.getElementById("timeRemaining").innerHTML = "&nbsp;"
         } else if (window.ChapterBook=="none") {
@@ -574,67 +588,91 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.updateProgress = function() {
+
+        localStorage.setItem(`${title}-currentLength`, pages.length);
+        localStorage.setItem('currentLength', pages.length);
         
-
-        if (window.ChapterBook=="selection") {
-            page_number = currentPage;
-            total_pages = pages.length;    
-        } else {
-            page_number = word_count_before + currentPage;
-            total_pages = word_count_before + pages.length + word_count_after;    
-        }
-
-        console.log("\nBefore:",word_count_before,"\nAfter:",word_count_after);
-        console.log("\nBefore:",currentPage,"\nAfter:",pages.length-currentPage);
-
-        const progress = ((page_number / (total_pages - 1)) * 100);
-        //if (progress>100){
-        //    progress = 100;
-        //    displayPage(pages.length - 1);
-        //} else 
-        if (window.ChapterBook!="none") {
-            if (isNaN(progress)) {
-
-                if (window.pageProg==0) {
-                    progressPercentage.innerText = `100%`;
-                } else {
-                    progressPercentage.innerText = `1 of ${total_pages}`;
-                }
-                timeRemaining.innerText = `0`;    
+        if (all_chapters.length==text_arr.length) {
+            if (window.ChapterBook=="selection") {
+                page_number = currentPage;
+                total_pages = pages.length;
+                //sub_word_count = pages.slice(currentPage).join(' ').split(/\s+/).length;
+                sub_word_count = pages.slice(currentPage+1).join(' ').split(/\s+/).length;
             } else {
-                if (window.pageProg==0) {
-                    progressPercentage.innerText = `${Math.round(progress)}%`;
+                prev_page_number = 0;
+                prev_chapters = all_chapters.slice(0,text_arr.indexOf(title))
+                prev_chapters.forEach(function (value, i) {
+                    prev_page_number += value.length;
+                });
+                //page_number += currentPage;
+                sub_page_number = 0;
+                words_following = 0;
+                if ((text_arr.indexOf(title)+1)<text_arr.length) {
+                    sub_chapters = all_chapters.slice(text_arr.indexOf(title)+1)
+                    sub_chapters.forEach(function (value, i) {
+                        sub_page_number += value.length;
+                        words_following += value.join(' ').split(" ").length
+                    });    
                 } else {
-                    progressPercentage.innerText = `${page_number+1} of ${total_pages}`;
+                    sub_page_number = 0;
                 }
-
-                const remainingWords = pages.slice(page_number).join(' ').split(/\s+/).length + total_pages-currentPage;
-                const remainingMinutes = Math.ceil(remainingWords / localStorage.getItem('wpm'));
-                if (remainingMinutes<=60) {
-                    timeRemaining.innerText = `${remainingMinutes} mins left`;    
+                console.log(prev_page_number,currentPage)
+                page_number = prev_page_number + currentPage;
+                total_pages = prev_page_number + pages.length + sub_page_number;    
+                sub_word_count = pages.slice(currentPage+1).join(' ').split(/\s+/).length + words_following;
+            }
+    
+            const progress = ((currentPage / (pages.length - 1)) * 100);
+            //if (progress>100){
+            //    progress = 100;
+            //    displayPage(pages.length - 1);
+            //} else 
+            if (window.ChapterBook!="none") {
+                if (isNaN(progress)) {
+                    if (window.pageProg==0) {
+                        progressPercentage.innerText = `0%`;
+                    } else {
+                        progressPercentage.innerText = `${page_number+1} of ${total_pages}`;
+                    }
+                    timeRemaining.innerText = `0 mins left`;    
                 } else {
-                    remainingHours = Math.floor(remainingMinutes/60)
-                    minutesLeft = remainingMinutes % 60;
-                    timeRemaining.innerText = `${remainingHours}h ${minutesLeft}m left`;    
+                    if (window.pageProg==0) {
+                        progressPercentage.innerText = `${Math.floor(progress)}%`;
+                    } else {
+                        progressPercentage.innerText = `${page_number+1} of ${total_pages}`;
+                    }
+    
+                    const remainingWords = sub_word_count;
+                    const remainingMinutes = Math.ceil(remainingWords / localStorage.getItem('wpm'));
+                    if (remainingMinutes<=60) {
+                        timeRemaining.innerText = `${remainingMinutes} mins left`;    
+                    } else {
+                        remainingHours = Math.floor(remainingMinutes/60)
+                        minutesLeft = remainingMinutes % 60;
+                        timeRemaining.innerText = `${remainingHours}h ${minutesLeft}m left`;    
+                    }
                 }
             }
-        }
-        
-        if (title=="Contents") {
-            var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-        } else {
-            if (isNaN(progress)){
-                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+0;
-            } else if (progress>100) {
-                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+1;
+            
+            if (title=="Contents") {
+                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
             } else {
-                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+progress/100;
-            }    
+                if (isNaN(progress)){
+                    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+0;
+                } else if (progress>100) {
+                    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+1;
+                } else {
+                    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+progress/100;
+                }    
+            }
+            //history_list = JSON.parse(sessionStorage.getItem("history_list")) || [];
+            //history_list.push(newurl)
+            //sessionStorage.setItem("history_list",JSON.stringify(history_list))
+            window.history.pushState({path:newurl},'',newurl);    
+    
         }
-        //history_list = JSON.parse(sessionStorage.getItem("history_list")) || [];
-        //history_list.push(newurl)
-        //sessionStorage.setItem("history_list",JSON.stringify(history_list))
-        window.history.pushState({path:newurl},'',newurl);    
+
+        
     }
 
     //window.addEventListener("popstate", function (e) {
