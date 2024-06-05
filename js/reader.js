@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 element_parts = element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"").split(" ");
                 text += `\n`;
                 for (const part of element_parts) {
-                    text += `<a%20href="?file=${element.replace(/\s/i,"%20")}"%20onClick="localStorage.setItem('${element.replace(/\s/g,"%20")}-currentPage',%200);">${part} </a>`;
+                    text += `<a%20href="javascript:void('')"%20onClick="jumpToPage(text_arr.indexOf('${element.replace(/\s/i,"%20")}'),%200);">${part} </a>`;
                 }
             }
         }
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //fontSize=fontSize.value
         //lineHeight=lineHeight.value
         screenWidth= Math.floor(window.innerWidth-40)
-        screenHeight=  Math.floor(window.innerHeight-115)
+        screenHeight=  Math.floor(window.innerHeight-110)
         // Create a canvas element to measure text
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
@@ -632,7 +632,7 @@ console.log(chapter_index,page)
             if (window.ChapterBook!="none") {
                 if (isNaN(progress)) {
                     if (window.pageProg==0) {
-                        progressPercentage.innerText = `0%`;
+                        progressPercentage.innerText = `${Math.round(100*page_number/total_pages)}%`;
                     } else {
                         progressPercentage.innerText = `${page_number+1} of ${total_pages}`;
                     }
