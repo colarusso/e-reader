@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         content.style.fontSize = fontSize.value + 'px';
         content.style.lineHeight = lineHeight.value;
         content.style.textAlign = textAlign.value;
-        paginateAndDisplay();
+        //paginateAndDisplay();
     }
 
 
