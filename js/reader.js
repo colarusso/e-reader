@@ -202,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
         //    applyDarkMode();
         //}
         applySettings();
-        applyChapterBook();
     }
 
     function applySettings() {
@@ -637,7 +636,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     timeRemaining.innerText = `0 mins left`;    
                 } else {
                     if (window.pageProg==0) {
-                        progressPercentage.innerText = `${Math.floor(progress)}%`;
+                        progressPercentage.innerText = `${Math.round(100*page_number/total_pages)}%`;
                     } else {
                         progressPercentage.innerText = `${page_number+1} of ${total_pages}`;
                     }
@@ -668,6 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //history_list = JSON.parse(sessionStorage.getItem("history_list")) || [];
             //history_list.push(newurl)
             //sessionStorage.setItem("history_list",JSON.stringify(history_list))
+            applyChapterBook();
             window.history.pushState({path:newurl},'',newurl);    
     
         }
