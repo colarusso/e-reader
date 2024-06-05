@@ -28,41 +28,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get title from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const title = urlParams.get('file') || localStorage.getItem('lastSelection') || "Contents";
-
-    localStorage.setItem('lastSelection', title);
-
-    const textFile = title//`${title}.txt`;
-    all_chapters = []
     
-    // Display the title as a link
-    //titleElement.innerText = title.charAt(0).toUpperCase() + title.slice(1);
+    title = urlParams.get('file') || localStorage.getItem('lastSelection') || "Contents";
     titleElement.innerText = "🎧 " + title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
     document.title = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"") + " | " + collection_name
-    titleElement.href = "javascript:audio_play();";  
-    //if (title!="Contents") {
-    // "🎧 "
-    //    titleElement.href = textFile;    
-    //}
-
-    // Check if the title has changed
-    //if (localStorage.getItem('currentTitle') !== title) {
-    //    localStorage.setItem('currentTitle', title);
-    //    currentPage = 0;
-    //    localStorage.setItem('currentPage', currentPage);
-    //} else {
-    //    currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 0;
-    //}
-    //let currentPage = 0;
     let currentPage = parseInt(localStorage.getItem(`${title}-currentPage`), 10) || 0;
     let currentLength = parseInt(localStorage.getItem(`${title}-currentLength`), 10) || 1;
     localStorage.setItem('currentLength', currentLength);
+    localStorage.setItem('lastSelection', title);
     
     let currentProg = (urlParams.get('prog')) || currentPage/currentLength;
     if (currentProg>1){
         currentProg = 0.999999999999;
     }
-    currentPage = Math.round(currentLength*currentProg);
+    //currentPage = Math.round(currentLength*currentProg);
     //console.log(currentProg,currentLength,currentPage,Math.floor(currentLength*currentProg))
 
     // Load settings from local storage
@@ -74,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let word_count_before = 0;
     let word_count_after = 0;
     let this_word_count = 0;
+
+    all_chapters = [];
+    const textFile = title//`${title}.txt`;
 
     var text = "";
     // Load the book content
@@ -87,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(text => {
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Dynamically paginate text
-        currentPage = Math.floor(localStorage.getItem('currentLength', currentLength)*currentProg);
+        currentPage = Math.floor(localStorage.getItem(`${textFile}-currentLength`)*currentProg);
         displayPage(currentPage);
         //updateProgress();
     })
@@ -113,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         document.getElementById("text_container").value = text;
         pages = paginateText(text); // Paginate the error message
-        currentPage = Math.floor(localStorage.getItem('currentLength', currentLength)*currentProg);
+        currentPage = Math.floor(localStorage.getItem(`${textFile}-currentLength`)*currentProg);
         displayPage(currentPage);
         //updateProgress();
         var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
@@ -168,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //document.getElementById("information").innerHTML = "";
     for (const element of text_arr) { // You can use `let` instead of `const` if you like
-        document.getElementById("contents").innerHTML += `<button onclick="localStorage.setItem('${element}-currentPage', 0);window.location.href = '?file=${element}'" style="margin-bottom: 6px;">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"")}</button>`
+        document.getElementById("contents").innerHTML += `<button onclick="jumpToPage(text_arr.indexOf('${element}'), 0);toggleInfo();" style="margin-bottom: 6px;">${element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"")}</button>`
     }
 
     function saveSettings() {
@@ -350,8 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pages.push(currentPage);
         }
     
-        //localStorage.setItem(`${title}-currentLength`, pages.length);
-        //localStorage.setItem('currentLength', pages.length);
+        localStorage.setItem(`${title}-currentLength`, pages.length);
         return pages;
     }
     
@@ -382,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     var option = document.createElement("option");
                     preview = ordered[mark];
                     option.text = `${entry.split('/')[entry.split('/').length-1].replace(/\.txt$/i,"")}: ${preview}`.slice(0, 45)+"...";
-                    option.value = `?file=${entry}&prog=${mark}`;
+                    option.value = `${entry},${mark}`;
                     var select = document.getElementById("jumptobookmaks");
                     select.appendChild(option);
                 }    
@@ -411,6 +392,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    window.jumpToPage = function(chapter_index,page) {
+
+console.log(chapter_index,page)
+
+        pages = all_chapters[chapter_index]
+
+        title = text_arr[chapter_index];
+        titleElement.innerText = "🎧 " + title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
+        document.title = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"") + " | " + collection_name
+        let currentLength = parseInt(localStorage.getItem(`${title}-currentLength`), 10);
+        localStorage.setItem('currentLength', currentLength);
+        localStorage.setItem('lastSelection', title);
+        displayPage(page);
+
+    }
+
     window.nextPage = function() {
         //toggleInfo();
         if (currentPage < pages.length - 1) {
@@ -425,7 +422,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if ((text_arr[text_arr.indexOf(this_title)+1])) {
                 localStorage.setItem(`${text_arr[text_arr.indexOf(this_title)+1]}-currentPage`, 0);
-                window.location.href = '?file='+text_arr[text_arr.indexOf(this_title)+1]
+
+                //window.location.href = '?file='+text_arr[text_arr.indexOf(this_title)+1]
+
+                jumpToPage(text_arr.indexOf(this_title)+1,0);
+            
             } else if (!text_arr.indexOf(this_title)) {
                 localStorage.setItem(`${text_arr[1]}-currentPage`, 0);
                 window.location.href = '?file='+text_arr[1]
@@ -445,8 +446,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (text_arr[text_arr.indexOf(this_title)-1]) {
-                //localStorage.setItem(`${text_arr[text_arr.indexOf(this_title)-1]}-currentPage`, 10000000000000000);
-                window.location.href = '?file='+text_arr[text_arr.indexOf(this_title)-1]+'&prog=0.999999999999'
+                //window.location.href = '?file='+text_arr[text_arr.indexOf(this_title)-1]+'&prog=0.999999999999'
+                jumpToPage(text_arr.indexOf(this_title)-1,all_chapters[text_arr.indexOf(this_title)-1].length-1);
+
             }
         }
     }
@@ -513,13 +515,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.toggleInfo = function(focus_call=0) {
         stop_talk();
+        document.getElementById("infoToggle").blur();
         document.getElementById("jumpto").value = ((currentPage / (pages.length - 1)) * 100);
         if (information.style.display === "none" || information.style.display === "") {
             information.style.display = "flex";
         } else {
             information.style.display = "none";
+            shortcuts.style.display = "none";
+            document.getElementById("shortcuts_expand_text").innerHTML = "+ Show shortcut glossary";
         }
-        document.getElementById("infoToggle").blur();
         if (focus_call==1) {
             document.getElementById('jumpto').focus();
         }
@@ -537,14 +541,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.toggleSettings = function(focus_call=0) {
         stop_talk();
+        document.getElementById("infoToggle").blur();
         if (controls.style.display === "none" || controls.style.display === "") {
             controls.style.display = "flex";
-            document.getElementById("infoToggle").blur();
         } else {
             controls.style.display = "none";
             applySettings();
         }
-        document.getElementById("infoToggle").blur();
         if (focus_call==1) {
             document.getElementById('fontType').focus();
         }
@@ -692,9 +695,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (e.keyCode == '32') {
             // spacebar
-            controls.style.display = "none";
-            information.style.display = "none";
-            audio_play();
+            if ((controls.style.display != "flex") && (information.style.display != "flex")){
+                //controls.style.display = "none";
+                //information.style.display = "none";
+                audio_play();
+            }
         }
         else if (e.keyCode == '66') {
             // b
@@ -708,14 +713,20 @@ document.addEventListener('DOMContentLoaded', () => {
             // f
             toggleChapterBook();
         }
-        else if (e.keyCode == '49') {
-            // 1
+        else if (e.keyCode == '81') {
+            // q
             controls.style.display = "none";
             applySettings();
             toggleInfo(1);
         }
-        else if (e.keyCode == '50') {
-            // 2
+        else if (e.keyCode == '13') {
+            // Enter
+            if (controls.style.display == "flex") {
+                toggleSettings(1);
+            }
+        }
+        else if (e.keyCode == '87') {
+            // w
             information.style.display = "none";
             toggleSettings(1);
         }
