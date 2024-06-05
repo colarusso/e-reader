@@ -1,0 +1,4 @@
+footnotes = {
+    "1":"this is a footnote",
+    "2":"this is a a longer footnote. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in tempor tortor, sed tristique ipsum. Vivamus sed dui fermentum, tempor sem vel, hendrerit sem. Vivamus vel libero libero. Nullam ornare vulputate leo, cursus ultrices diam pellentesque in. Nam felis magna, molestie vitae magna a, feugiat auctor est. Cras tortor urna, bibendum ut enim quis, gravida pharetra lorem. Nulla facilisi. Suspendisse sollicitudin tortor id magna congue mollis. Sed eleifend ac massa nec placerat. Nulla vitae eros ullamcorper elit lobortis vestibulum. Nam sed maximus velit, at pulvinar nibh. Cras bibendum erat consequat, mollis elit id, dictum mauris. Sed nulla enim, pharetra ac nunc nec, pharetra iaculis nulla. Suspendisse convallis gravida quam ut tempus. Vivamus lacinia mauris diam, in hendrerit turpis varius elementum. Pellentesque semper lorem nec neque maximus efficitur. ",
+}

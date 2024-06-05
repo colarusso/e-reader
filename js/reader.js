@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('lastSelection', title);
     
     let currentProg = (urlParams.get('prog')) || currentPage/currentLength;
-    if (currentProg>1){
+    if (currentProg>=1){
         currentProg = 0.999999999999;
     }
     //currentPage = Math.round(currentLength*currentProg);
@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let word_count_after = 0;
     let this_word_count = 0;
 
+    window.islink = 0;
     all_chapters = [];
     const textFile = title//`${title}.txt`;
 
@@ -80,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.title = "Contents" + " | " + collection_name
             //titleElement.style.display = "none";
         }
-        text = `<i>Arrow keys or tap left-right to "turn" pages. Bookmarking <a%20href=".">this </a><a%20href=".">page</a> remembers your place. Mobile users: add to homescreen for best UX. Tapping 🎧 toggels read aloud on/off.</i>
+        text = `<i>Arrow keys or tap left-right to "turn" pages. Bookmarking <a%20href="javascript:void('')"%20onClick="jumpToPage(text_arr.indexOf('Contents'),%200);">this </a><a%20href="javascript:jumpToPage(text_arr.indexOf('Contents'),%200);">page</a> remembers your place. Mobile users: add to homescreen for best UX. Tapping 🎧 toggels read aloud on/off.</i>
         
         <center><b>~ Contents ~</b></center>`;
 
@@ -89,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 element_parts = element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"").split(" ");
                 text += `\n`;
                 for (const part of element_parts) {
-                    text += `<a%20href="javascript:void('')"%20onClick="jumpToPage(text_arr.indexOf('${element.replace(/\s/i,"%20")}'),%200);">${part} </a>`;
+                    text += `<a%20href="javascript:jumpToPage(text_arr.indexOf('${element.replace(/\s/i,"%20")}'),%200);">${part} </a>`;
                 }
             }
         }
@@ -123,8 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(error);
             });
         } else if (text_arr.indexOf("Contents")+1<text_arr.length) {
-            text = `<i>Arrow keys or tap left-right to "turn" pages. Bookmarking <a%20href=".">this </a><a%20href=".">page</a> remembers your place. Mobile users: add to homescreen for best UX. Tapping 🎧 toggels read aloud on/off.</i>
-            
+            text = `<i>Arrow keys or tap left-right to "turn" pages. Bookmarking <a%20href="javascript:void('')"%20onClick="jumpToPage(text_arr.indexOf('Contents'),%200);">this </a><a%20href="javascript:jumpToPage(text_arr.indexOf('Contents'),%200);">page</a> remembers your place. Mobile users: add to homescreen for best UX. Tapping 🎧 toggels read aloud on/off.</i>
+        
             <center><b>~ Contents ~</b></center>`;
     
             for (const element of text_arr) { // You can use `let` instead of `const` if you like
@@ -132,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     element_parts = element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"").split(" ");
                     text += `\n`;
                     for (const part of element_parts) {
-                        text += `<a%20href="?file=${element.replace(/\s/i,"%20")}"%20onClick="localStorage.setItem('${element.replace(/\s/g,"%20")}-currentPage',%200);">${part} </a>`;
+                        text += `<a%20href="javascript:jumpToPage(text_arr.indexOf('${element.replace(/\s/i,"%20")}'),%200);">${part} </a>`;
                     }
                 }
             }
@@ -260,6 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Helper function to add a line to the current page
         function addLineToPage(line) {
             line = line.replace(/\%20/g," ")
+
+            line = line.replace(/\[FN([^\]]+)]/ig,`<a href="javascript:void('');" onClick="loadFootnote('$1')">FN$1</a>`)
+
             if (!line.match(/<.+>/)){
                 line = line.replace(/-/g,"&#8209;")                
                 line = line.replace(/—/g,"&#8209;")                
@@ -394,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.jumpToPage = function(chapter_index,page) {
 
-console.log(chapter_index,page)
+        //console.log(chapter_index,page)
 
         pages = all_chapters[chapter_index]
 
@@ -466,6 +470,11 @@ console.log(chapter_index,page)
     window.handleContentClick = function(event) {
         stop_talk();
 
+        // Check if the target of the click is a link
+        if (event.target.tagName === 'A') {
+            return; // Stop the function from executing further
+        }
+        
         const rect = content.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const third = rect.width / 3;
@@ -476,7 +485,7 @@ console.log(chapter_index,page)
             nextPage();
         } //else {
         //    toggleSettings();
-        //}
+        //}    
     }
 
     window.toggleBookmark = function() {
@@ -490,7 +499,12 @@ console.log(chapter_index,page)
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
             document.getElementById("bookmark").classList.remove("bookmarked");
         } else {
-            this_sections_bookmarks[(currentPage / (pages.length - 1))] = pages[currentPage].join(" ").replace(/<[^>]*>/g,"").replace(/\s+/g," ").replaceAll("&#8209;","-").slice(0, 50); 
+            if ((currentPage>0) && (pages.length>1)) {
+                anchor = (currentPage / (pages.length - 1))
+            } else {
+                anchor = 0;
+            }
+            this_sections_bookmarks[anchor] = pages[currentPage].join(" ").replace(/<[^>]*>/g,"").replace(/\s+/g," ").replaceAll("&#8209;","-").slice(0, 50); 
             bookmarks[title] = this_sections_bookmarks
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
             document.getElementById("bookmark").classList.add("bookmarked");
@@ -553,6 +567,29 @@ console.log(chapter_index,page)
         }
     }
 
+    window.loadFootnote = function(fn) {
+        
+        //footnotes = {"1":"this is a footnote"}
+
+        stop_talk();
+        if (footnote_display.style.display === "none" || footnote_display.style.display === "") {
+            fn_file = title.replace(/\.txt$/i,".js");
+            var script = document.createElement('script');
+            script.src = fn_file;
+            console.log(fn_file)
+            script.onload = function () {
+                footnote_display.innerHTML = "FN" + fn + ": " + footnotes[fn];
+                footnote_display.style.display = "flex";            
+            };
+            document.getElementsByTagName('head')[0].appendChild(script);
+        } else {
+            footnote_display.innerHTML = "";
+            footnote_display.style.display = "none";
+        }
+
+    }
+
+
 
     window.toggleChapterBook = function() {
         if (window.ChapterBook=="selection") {
@@ -585,6 +622,14 @@ console.log(chapter_index,page)
         if (!information.contains(event.target) && !infoToggle.contains(event.target)) {
             if (information.style.display === "flex") {
                 information.style.display = "none";
+            }
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!footnote_display.contains(event.target) && !(event.target.tagName === 'A')) {
+            if (footnote_display.style.display === "flex") {
+                footnote_display.style.display = "none";
             }
         }
     });
@@ -705,8 +750,8 @@ console.log(chapter_index,page)
             // b
             toggleBookmark();
         }
-        else if (e.keyCode == '80') {
-            // p
+        else if (e.keyCode == '83') {
+            // s
             toggleProgress();
         }
         else if (e.keyCode == '65') {
@@ -810,12 +855,12 @@ var talk = function () {
 
 	speechSynthesis.cancel(); // if it errors, this clears out the error.
     
-    var sentences = content.innerHTML.replace(/<.*ALT=('|")([^'']*)('|")/ig,"The following is the Alt text of an image: $2 . End of description.<").replace(/<[^>]*>/g,"").split(/[^\w\s'",]+-/);
+    var sentences = content.innerHTML.replace(/<.*ALT=('|")([^'']*)('|")/ig,"The following is the Alt text of an image: $2 . End of description.<").replace(/>FN[^\<]+</gi,"").replace(/<[^>]*>/g,"").split(/[^\w\s'",]+-/);
     
     for (var i=0;i< sentences.length;i++)
     {
 		var toSay = sayit(sentences,i);
-		toSay.text = sentences[i];
+		toSay.text = sentences[i]
 		speechSynthesis.speak(toSay);
     }
 }
