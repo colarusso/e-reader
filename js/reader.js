@@ -578,8 +578,8 @@ document.addEventListener('DOMContentLoaded', () => {
             script.src = fn_file;
             console.log(fn_file)
             script.onload = function () {
-                footnote_display.innerHTML = "FN" + fn + ": " + footnotes[fn];
-                footnote_display.style.display = "flex";            
+                footnote_display.innerHTML = "<b>FN" + fn + "</b>: " + footnotes[fn];
+                footnote_display.style.display = "block";            
             };
             document.getElementsByTagName('head')[0].appendChild(script);
         } else {
@@ -628,7 +628,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', function(event) {
         if (!footnote_display.contains(event.target) && !(event.target.tagName === 'A')) {
-            if (footnote_display.style.display === "flex") {
+            if (footnote_display.style.display === "block") {
                 footnote_display.style.display = "none";
             }
         }
