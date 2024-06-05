@@ -618,7 +618,7 @@ console.log(chapter_index,page)
                 } else {
                     sub_page_number = 0;
                 }
-                console.log(prev_page_number,currentPage)
+                //console.log(prev_page_number,currentPage)
                 page_number = prev_page_number + currentPage;
                 total_pages = prev_page_number + pages.length + sub_page_number;    
                 sub_word_count = pages.slice(currentPage+1).join(' ').split(/\s+/).length + words_following;
