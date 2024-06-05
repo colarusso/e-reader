@@ -582,9 +582,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 footnote_display.style.display = "block";            
             };
             document.getElementsByTagName('head')[0].appendChild(script);
-        } else {
+        } else if (footnote_display.innerHTML == "<b>FN" + fn + "</b>: " + footnotes[fn]) {
             footnote_display.innerHTML = "";
             footnote_display.style.display = "none";
+        } else {
+            footnote_display.innerHTML = "<b>FN" + fn + "</b>: " + footnotes[fn];
         }
 
     }
@@ -761,6 +763,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (e.keyCode == '81') {
             // q
             controls.style.display = "none";
+            footnote_display.style.display = "none";
             applySettings();
             toggleInfo(1);
         }
@@ -773,6 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (e.keyCode == '87') {
             // w
             information.style.display = "none";
+            footnote_display.style.display = "none";
             toggleSettings(1);
         }
         else if (e.keyCode == '37') {
