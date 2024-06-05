@@ -631,6 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', function(event) {
         if (!footnote_display.contains(event.target) && !(event.target.tagName === 'A')) {
             if (footnote_display.style.display === "block") {
+                footnote_display.innerHTML = "";
                 footnote_display.style.display = "none";
             }
         }
@@ -763,6 +764,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (e.keyCode == '81') {
             // q
             controls.style.display = "none";
+            footnote_display.innerHTML = "";
             footnote_display.style.display = "none";
             applySettings();
             toggleInfo(1);
@@ -776,6 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (e.keyCode == '87') {
             // w
             information.style.display = "none";
+            footnote_display.innerHTML = "";
             footnote_display.style.display = "none";
             toggleSettings(1);
         }
@@ -834,7 +837,7 @@ var sayit = function (sentences,i)
     msg.onstart = function (event) {
     };
     msg.onend = function(event) {
-        if (speaking == 1) {
+        if ((speaking == 1) && (footnote_display.innerHTML == "")) {
             nextPage();
         }
 	    console.log('Finished in ' + event.elapsedTime + ' seconds.');
@@ -859,7 +862,11 @@ var talk = function () {
 
 	speechSynthesis.cancel(); // if it errors, this clears out the error.
     
-    var sentences = content.innerHTML.replace(/<.*ALT=('|")([^'']*)('|")/ig,"The following is the Alt text of an image: $2 . End of description.<").replace(/>FN[^\<]+</gi,"").replace(/<[^>]*>/g,"").split(/[^\w\s'",]+-/);
+    if (footnote_display.innerHTML == "") {
+        var sentences = content.innerHTML.replace(/<.*ALT=('|")([^'']*)('|")/ig,"The following is the Alt text of an image: $2 . End of description.<").replace(/>FN[^\<]+</gi,"").replace(/<[^>]*>/g,"").split(/[^\w\s'",]+-/);
+    } else {
+        var sentences = footnote_display.innerHTML.replace(/<[^>]*>/g,"").replace(/^FN([^:]*):/g,"Footnote $1. ").split(/[^\w\s'",]+-/);
+    }
     
     for (var i=0;i< sentences.length;i++)
     {
