@@ -709,8 +709,8 @@ console.log(chapter_index,page)
             // p
             toggleProgress();
         }
-        else if (e.keyCode == '70') {
-            // f
+        else if (e.keyCode == '65') {
+            // a
             toggleChapterBook();
         }
         else if (e.keyCode == '81') {
