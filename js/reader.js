@@ -83,10 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         text = `<i>Arrow keys or tap left-right to "turn" pages. Bookmarking <a%20href="javascript:void('')"%20onClick="jumpToPage(text_arr.indexOf('Contents'),%200);">this </a><a%20href="javascript:jumpToPage(text_arr.indexOf('Contents'),%200);">page</a> remembers your place. Mobile users: add to homescreen for best UX. Tapping 🎧 toggels read aloud on/off.</i>
         
-        <center><b>~ Contents ~</b></center>`;
+        <center><b>${collection_name}</b><br><br>~ Contents ~</center>`;
 
         for (const element of text_arr) { // You can use `let` instead of `const` if you like
-            if (element!="Contents" && element!="texts/Cover.txt") {
+            if (element!="Contents") {
                 element_parts = element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"").split(" ");
                 text += `\n`;
                 for (const part of element_parts) {
@@ -126,10 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (text_arr.indexOf("Contents")+1<text_arr.length) {
             text = `<i>Arrow keys or tap left-right to "turn" pages. Bookmarking <a%20href="javascript:void('')"%20onClick="jumpToPage(text_arr.indexOf('Contents'),%200);">this </a><a%20href="javascript:jumpToPage(text_arr.indexOf('Contents'),%200);">page</a> remembers your place. Mobile users: add to homescreen for best UX. Tapping 🎧 toggels read aloud on/off.</i>
         
-            <center><b>~ Contents ~</b></center>`;
+            <center><b>${collection_name}</b><br><br>~ Contents ~</center>`;
     
             for (const element of text_arr) { // You can use `let` instead of `const` if you like
-                if (element!="Contents" && element!="texts/Cover.txt") {
+                if (element!="Contents") {
                     element_parts = element.split('/')[element.split('/').length-1].replace(/\.txt$/i,"").split(" ");
                     text += `\n`;
                     for (const part of element_parts) {
