@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.onresize = function(){ location.reload(); }
     
+
+    window.editted = 0;
+
     const content = document.getElementById('content');
     const fontType = document.getElementById('fontType');
     const fontSize = document.getElementById('fontSize');
@@ -191,11 +194,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function applySettings() {
-        content.style.fontFamily = fontType.value;
-        content.style.fontSize = fontSize.value + 'px';
-        content.style.lineHeight = lineHeight.value;
-        content.style.textAlign = textAlign.value;
-        paginateAndDisplay();
+        saveSettings();
+        if (editted==1){
+            window.location.href = '.'
+        } else {
+            content.style.fontFamily = fontType.value;
+            content.style.fontSize = fontSize.value + 'px';
+            content.style.lineHeight = lineHeight.value;
+            content.style.textAlign = textAlign.value;
+            paginateAndDisplay();    
+        }
     }
 
 
@@ -221,7 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function paginateAndDisplay() {
-        saveSettings();
         if (pages.length > 0) {
             pages = paginateText(all_chapters_text[text_arr.indexOf(title)]) //paginateText(document.getElementById("text_container").value);
             //updateProgress();
@@ -403,7 +410,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //console.log(chapter_index,page)
 
-        pages = all_chapters[chapter_index]
+        //pages = all_chapters[chapter_index]
+        pages = paginateText(all_chapters_text[chapter_index])
+
+        if (page=="end"){
+            page = pages.length-1;
+        }
 
         title = text_arr[chapter_index];
         titleElement.innerText = "🎧 " + title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
@@ -454,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (text_arr[text_arr.indexOf(this_title)-1]) {
                 //window.location.href = '?file='+text_arr[text_arr.indexOf(this_title)-1]+'&prog=0.999999999999'
-                jumpToPage(text_arr.indexOf(this_title)-1,all_chapters[text_arr.indexOf(this_title)-1].length-1);
+                jumpToPage(text_arr.indexOf(this_title)-1,"end");
 
             }
         }
@@ -775,6 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (e.keyCode == '13') {
             // Enter
             if (controls.style.display == "flex") {
+                applySettings();
                 toggleSettings(1);
             }
         }
@@ -783,6 +796,7 @@ document.addEventListener('DOMContentLoaded', () => {
             information.style.display = "none";
             footnote_display.innerHTML = "";
             footnote_display.style.display = "none";
+            applySettings();
             toggleSettings(1);
         }
         else if (e.keyCode == '37') {
