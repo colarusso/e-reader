@@ -216,7 +216,7 @@ hr {
     padding: 15px 20px 20px 20px;
     background-color: #fff;
     width: 100%;
-    max-height: 75dvh;
+    max-height: calc(100dvh - 110px);
     overflow-y: auto;
     display: none;
     position: fixed;
@@ -293,6 +293,7 @@ hr {
     flex: 1;
     text-align: justify;
     overflow-y: hidden;
+    max-height: calc(100dvh - 100px);
     margin-top: 55px; /* Offset by the height of the menu bar */
 }
 
