@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Loop through words to build lines and pages
         words.forEach(word => {
             if (word.match(/<b>/i)){
-                console.log("bold found")
+                //console.log("bold found")
                 addLineToPage(""); // This is a hack to account for diff sizes of bold and not bold text
             }
             if (word.match(/<img/i)) {
