@@ -293,7 +293,7 @@ hr {
     flex: 1;
     text-align: justify;
     overflow-y: hidden;
-    max-height: calc(100dvh - 100px);
+    max-height: calc(100dvh - 110px);
     margin-top: 55px; /* Offset by the height of the menu bar */
 }
 
