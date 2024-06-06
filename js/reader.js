@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             content.style.fontFamily = fontType.value;
             content.style.fontSize = fontSize.value + 'px';
-            content.style.lineHeight = lineHeight.value;
+            content.style.lineHeight = (fontSize.value*lineHeight.value)+"px";
             content.style.textAlign = textAlign.value;
             paginateAndDisplay();    
         }
@@ -309,6 +309,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Loop through words to build lines and pages
         words.forEach(word => {
+            if (word.match(/<b>/i)){
+                console.log("bold found")
+                addLineToPage(""); // This is a hack to account for diff sizes of bold and not bold text
+            }
             if (word.match(/<img/i)) {
                 if (currentPage.length>0) {
                     pages.push(currentPage);
