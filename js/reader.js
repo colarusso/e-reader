@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let this_word_count = 0;
 
     window.islink = 0;
+    all_chapters_text = [];
     all_chapters = [];
     const textFile = title//`${title}.txt`;
 
@@ -113,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.text(); // Proceed to extract the text only if status is 200
             })
             .then(text => {
+                all_chapters_text[text_arr.indexOf(page)] = text;
                 all_chapters[text_arr.indexOf(page)] = paginateText(text);
                 if (text_arr.indexOf(page)+1<text_arr.length) {
                     get_page_count(text_arr[text_arr.indexOf(page)+1]);
@@ -137,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
+            all_chapters_text[text_arr.indexOf(page)] = text;
             all_chapters[text_arr.indexOf(page)] = paginateText(text);
             if (text_arr.indexOf(page)+1<text_arr.length) {
                 get_page_count(text_arr[text_arr.indexOf(page)+1]);
@@ -220,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function paginateAndDisplay() {
         saveSettings();
         if (pages.length > 0) {
-            pages = paginateText(document.getElementById("text_container").value);
+            pages = paginateText(all_chapters_text[text_arr.indexOf(title)]) //paginateText(document.getElementById("text_container").value);
             //updateProgress();
             displayPage(currentPage);  
         }
