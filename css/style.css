@@ -343,6 +343,7 @@ footer {
     color: #a6a6a6;
     display: flex;
     position: absolute;
+    z-index: 1000px;
     bottom:0;
     left:0;
     right:0;

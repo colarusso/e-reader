@@ -357,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.displayPage = function(pageIndex) {
         this_page_marked = 0;
         start_of_page = pageIndex/localStorage.getItem("currentLength");
-        end_of_page = pageIndex/localStorage.getItem("currentLength")+1/localStorage.getItem("currentLength");
+        end_of_page = start_of_page+1/localStorage.getItem("currentLength");
         bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || {};
         document.getElementById('jumptobookmaks').options.length = 1;
         ordered_sections = []
@@ -416,6 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //pages = all_chapters[chapter_index]
         pages = paginateText(all_chapters_text[chapter_index])
+        localStorage.setItem(`${text_arr[chapter_index]}-currentLength`, pages.length);
 
         if (page=="end"){
             page = pages.length-1;
@@ -727,6 +728,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
             } else {
                 if (isNaN(progress)){
+                    console.log( currentPage,pages.length)
                     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+0;
                 } else if (progress>100) {
                     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?file='+title+'&prog='+1;
