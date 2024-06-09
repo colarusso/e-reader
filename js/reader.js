@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     title = urlParams.get('file') || localStorage.getItem('lastSelection') || "Contents";
     titleElement.innerText = "🎧 " + title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
     document.title = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"") + " | " + collection_name
+    book_title.innerText = collection_name;
     let currentPage = parseInt(localStorage.getItem(`${title}-currentPage`), 10) || 0;
     let currentLength = parseInt(localStorage.getItem(`${title}-currentLength`), 10) || 1;
     localStorage.setItem('currentLength', currentLength);
@@ -83,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (titleElement.innerText!="Contents") {
             titleElement.innerText = "🎧 "+"Contents"
             document.title = "Contents" + " | " + collection_name
+            book_title.innerText = collection_name;
             //titleElement.style.display = "none";
         }
         text = `<i>Arrow keys or tap left-right to "turn" pages. Bookmarking <a%20href="javascript:void('')"%20onClick="jumpToPage(text_arr.indexOf('Contents'),%200);">this </a><a%20href="javascript:jumpToPage(text_arr.indexOf('Contents'),%200);">page</a> remembers your place. Mobile users: add to homescreen for best UX. Tapping 🎧 toggels read aloud on/off.</i>
@@ -425,6 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
         title = text_arr[chapter_index];
         titleElement.innerText = "🎧 " + title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"")
         document.title = title.split('/')[title.split('/').length-1].replace(/\.txt$/i,"") + " | " + collection_name
+        book_title.innerText = collection_name;
         let currentLength = parseInt(localStorage.getItem(`${title}-currentLength`), 10);
         localStorage.setItem('currentLength', currentLength);
         localStorage.setItem('lastSelection', title);
@@ -599,7 +602,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(fn_file)
             script.onload = function () {
                 footnote_display.innerHTML = "<b>FN" + fn + "</b>: " + footnotes[fn];
-                footnote_display.style.display = "block";            
+                footnote_display.style.display = "block";     
+                footnote_display.scrollTop = 0;
             };
             document.getElementsByTagName('head')[0].appendChild(script);
         } else if (footnote_display.innerHTML == "<b>FN" + fn + "</b>: " + footnotes[fn]) {
@@ -607,6 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
             footnote_display.style.display = "none";
         } else {
             footnote_display.innerHTML = "<b>FN" + fn + "</b>: " + footnotes[fn];
+            footnote_display.scrollTop = 0;
         }
 
     }

@@ -23,6 +23,10 @@
         <button onclick="previousPage()">Previous</button>
         <button onclick="nextPage()">Next</button>
         -->
+        <button onclick="window.location.href='../'">Visit Bookshelf</button>
+        <hr style="margin:15px 0 5px 0;">
+        <div id="book_title">Book Title Here</div>
+        <hr>
         Jump to location (current selection)
         <input type="range" min="0" max="100" value="50" class="slider" id="jumpto" oninput="displayPage(Math.round(this.value/100*localStorage.getItem(`currentLength`)))">
         <hr>
