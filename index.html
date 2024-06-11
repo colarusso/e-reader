@@ -23,7 +23,7 @@
         <button onclick="previousPage()">Previous</button>
         <button onclick="nextPage()">Next</button>
         -->
-        <button onclick="window.location.href='../'">Visit Bookshelf</button>
+        <button onclick="window.location.href='../'">Bookshelf</button>
         <hr style="margin:15px 0 5px 0;">
         <div id="book_title">Book Title Here</div>
         <hr>
@@ -34,7 +34,9 @@
             <option value=null>Bookmarks</option>
         </select>
         <hr style="margin-bottom: 5px;">
-        <span id="shortcuts_expand"> <button id="shortcuts_expand_text" onclick="toggleShortcuts()">+ Show shortcut glossary</button>
+        <span id="shortcuts_expand"> 
+            <button id="shortcuts_expand_text" onclick="toggleShortcuts()">+ Shortcut glossary</button>
+            <button id="search_btn" onClick="search_text()">🔍</button>
         <div id="shortcuts" style="display:none;">
             Pressing:<br>
             <i class="shortcut">q</i> opens this window (☰);

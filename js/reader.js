@@ -559,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             information.style.display = "none";
             shortcuts.style.display = "none";
-            document.getElementById("shortcuts_expand_text").innerHTML = "+ Show shortcut glossary";
+            document.getElementById("shortcuts_expand_text").innerHTML = "+ Shortcut glossary";
         }
         if (focus_call==1) {
             document.getElementById('jumpto').focus();
@@ -569,10 +569,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.toggleShortcuts = function() {
         if (shortcuts.style.display === "none" || shortcuts.style.display === "") {
             shortcuts.style.display = "block";
-            document.getElementById("shortcuts_expand_text").innerHTML = "- Hide shortcut glossary";
+            document.getElementById("shortcuts_expand_text").innerHTML = "- Shortcut glossary";
         } else {
             shortcuts.style.display = "none";
-            document.getElementById("shortcuts_expand_text").innerHTML = "+ Show shortcut glossary";
+            document.getElementById("shortcuts_expand_text").innerHTML = "+ Shortcut glossary";
         }
     }
 
@@ -845,6 +845,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }    
     
+    window.search_text = function() {
+        const newSearch = prompt("Full-book text search (case-insensitive exact match, excludes footnotes):");
+        if (newSearch === null) {
+            return; //break out of the function early
+        }
+    }
 
 
 });

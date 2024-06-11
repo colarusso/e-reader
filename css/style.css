@@ -220,7 +220,7 @@ hr {
     padding: 15px 20px 20px 20px;
     background-color: #fff;
     width: 100%;
-    max-height: calc(100dvh - 110px);
+    max-height: 75%; /* calc(100dvh - 110px); */
     overflow-y: auto;
     display: none;
     position: fixed;
@@ -233,6 +233,17 @@ hr {
 }
 .dark-mode #information {
     background-color: black;
+}
+
+#search_btn {
+    float:right;
+    width:35px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #0000ff;
+}
+.dark-mode #search_btn {
+    color: #b1f7f2;
 }
 
 #shortcuts_expand_text {
